@@ -1,0 +1,65 @@
+name: backend
+on:
+  pull_request:
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend.yml"
+  push:
+    branches: [main]
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: fishbook
+          POSTGRES_USER: fishbook
+          POSTGRES_PASSWORD: fishbook
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U fishbook"
+          --health-interval 5s
+          --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-retries 10
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: pdo_pgsql, redis, gd, intl, mbstring, bcmath, zip
+          tools: composer:v2
+      - name: Cache composer
+        uses: actions/cache@v4
+        with:
+          path: backend/vendor
+          key: composer-${{ runner.os }}-${{ hashFiles('backend/composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-
+      - run: composer install --prefer-dist --no-progress --no-interaction
+      - run: cp .env.example .env
+      - run: php artisan key:generate
+      - name: Set DB host for service container
+        run: |
+          sed -i 's/^DB_HOST=db$/DB_HOST=127.0.0.1/' .env
+          sed -i 's/^REDIS_HOST=redis$/REDIS_HOST=127.0.0.1/' .env
+      - run: php artisan migrate --force
+      - run: ./vendor/bin/pint --test
+      - run: ./vendor/bin/phpstan analyse --memory-limit=512M
+      - run: ./vendor/bin/pest
+      - name: OpenAPI spec is up to date
+        run: |
+          php artisan l5-swagger:generate
+          git diff --exit-code storage/api-docs/openapi.json
