@@ -2,8 +2,15 @@
 /* eslint-disable */
 export * from './AuthTokenResponse';
 export * from './ClaimUsernameRequest';
+export * from './FishBreedCollection';
+export * from './FishBreedResource';
+export * from './FishResource';
+export * from './FishResourceEnvelope';
 export * from './LoginRequest';
 export * from './MeResponse';
 export * from './Model948a42bdb65c02ff487237856eef1afe200Response';
+export * from './PaginatedFishCollection';
 export * from './RegisterRequest';
+export * from './StoreFishRequest';
+export * from './UpdateFishRequest';
 export * from './UserResource';
