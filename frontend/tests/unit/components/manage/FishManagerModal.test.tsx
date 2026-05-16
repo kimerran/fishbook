@@ -109,7 +109,7 @@ describe('FishManagerModal', () => {
     fireEvent.click(screen.getByRole('button', { name: /delete/i }));
     await waitFor(() => {
       const deleteCall = fetchSpy.mock.calls.find(
-        ([, i]: [unknown, RequestInit | undefined]) => i?.method === 'DELETE',
+        (call) => (call[1] as RequestInit | undefined)?.method === 'DELETE',
       );
       expect(deleteCall).toBeDefined();
     });

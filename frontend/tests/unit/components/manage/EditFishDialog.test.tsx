@@ -90,12 +90,12 @@ describe('EditFishDialog', () => {
 
     await waitFor(() => {
       const patchCall = fetchSpy.mock.calls.find(
-        ([, i]: [unknown, RequestInit | undefined]) => i?.method === 'PATCH',
+        (call) => (call[1] as RequestInit | undefined)?.method === 'PATCH',
       );
       expect(patchCall).toBeDefined();
     });
     const patchCall = fetchSpy.mock.calls.find(
-      ([, i]: [unknown, RequestInit | undefined]) => i?.method === 'PATCH',
+      (call) => (call[1] as RequestInit | undefined)?.method === 'PATCH',
     )!;
     const body = JSON.parse((patchCall[1].body as string) ?? '{}');
     expect(body.breed).toBeUndefined();

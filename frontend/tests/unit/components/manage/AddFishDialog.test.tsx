@@ -65,12 +65,12 @@ describe('AddFishDialog', () => {
 
     await waitFor(() => {
       const postCall = fetchSpy.mock.calls.find(
-        ([, i]: [unknown, RequestInit | undefined]) => i?.method === 'POST',
+        (call) => (call[1] as RequestInit | undefined)?.method === 'POST',
       );
       expect(postCall).toBeDefined();
     });
     const postCall = fetchSpy.mock.calls.find(
-      ([, i]: [unknown, RequestInit | undefined]) => i?.method === 'POST',
+      (call) => (call[1] as RequestInit | undefined)?.method === 'POST',
     )!;
     const body = JSON.parse((postCall[1].body as string) ?? '{}');
     expect(body.nickname).toBe('Blub');
