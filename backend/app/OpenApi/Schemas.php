@@ -27,4 +27,20 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'data', ref: '#/components/schemas/FishResource'),
     ],
 )]
+#[OA\Schema(
+    schema: 'BackgroundCollection',
+    type: 'object',
+    properties: [
+        new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/BackgroundResource')),
+        new OA\Property(property: 'links', type: 'object'),
+        new OA\Property(property: 'meta', type: 'object'),
+    ],
+)]
+#[OA\Schema(
+    schema: 'BackgroundResourceEnvelope',
+    type: 'object',
+    properties: [
+        new OA\Property(property: 'data', ref: '#/components/schemas/BackgroundResource'),
+    ],
+)]
 class Schemas {}
