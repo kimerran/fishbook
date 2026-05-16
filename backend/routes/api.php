@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 Route::pattern('owner', '[A-Za-z0-9._-]{1,100}');
 Route::pattern('repo', '[A-Za-z0-9._-]{1,100}');
 
+// Slice 6: fish + background route-bind by ULID (26-char Crockford base32 uppercase).
+Route::pattern('fish', '[0-9A-HJKMNP-TV-Z]{26}');
+Route::pattern('background', '[0-9A-HJKMNP-TV-Z]{26}');
+
 Route::get('/health', HealthController::class)->name('health');
 
 Route::prefix('auth')->group(function () {
@@ -36,8 +40,7 @@ Route::get('/fishes/breeds', [FishController::class, 'breeds'])
     ->name('fishes.breeds');
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('fishes', FishController::class)
-        ->where(['fish' => '[0-9]+']);
+    Route::apiResource('fishes', FishController::class);
 
     Route::get('/backgrounds', [BackgroundController::class, 'index'])
         ->middleware('throttle:api')->name('backgrounds.index');
@@ -46,9 +49,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/backgrounds/generate', [BackgroundController::class, 'generate'])
         ->middleware('throttle:generate')->name('backgrounds.generate');
     Route::patch('/backgrounds/{background}/select', [BackgroundController::class, 'select'])
-        ->middleware('throttle:api')->name('backgrounds.select')->where(['background' => '[0-9]+']);
+        ->middleware('throttle:api')->name('backgrounds.select');
     Route::delete('/backgrounds/{background}', [BackgroundController::class, 'destroy'])
-        ->middleware('throttle:api')->name('backgrounds.destroy')->where(['background' => '[0-9]+']);
+        ->middleware('throttle:api')->name('backgrounds.destroy');
 });
 
 // Slice 5: GitHub Repo Aquarium endpoints. Global apiPrefix=api/v1 (bootstrap/app.php) handles versioning.
