@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasUlid;
 use Database\Factories\BackgroundFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,11 +27,11 @@ use Illuminate\Support\Carbon;
 class Background extends Model
 {
     /** @use HasFactory<BackgroundFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory, HasUlid, SoftDeletes;
 
     /** @var list<string> */
     protected $fillable = [
-        'user_id', 'kind', 'storage_key', 'width', 'height', 'prompt', 'is_active',
+        'ulid', 'user_id', 'kind', 'storage_key', 'width', 'height', 'prompt', 'is_active',
     ];
 
     /** @return array<string, string> */

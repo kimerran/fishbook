@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasUlid;
 use Database\Factories\FishFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,12 +13,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Fish extends Model
 {
     /** @use HasFactory<FishFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory, HasUlid, SoftDeletes;
 
     protected $table = 'fishes';
 
     /** @var list<string> */
     protected $fillable = [
+        'ulid',
         'user_id',
         'nickname',
         'breed',
