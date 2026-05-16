@@ -19,10 +19,15 @@ type Breed = { id: string; vertical_band_preference?: 'bottom' | null };
 export function AquariumCanvas({
   fishes,
   breeds,
+  // readOnly is consumed by surrounding chrome (manager dock, AddFishDialog
+  // trigger). Food-drop + hover remain enabled regardless (decision §3.4).
+  readOnly: _readOnly = false,
 }: {
   fishes: FishDTO[];
   breeds: Breed[];
+  readOnly?: boolean;
 }) {
+  void _readOnly;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fishMapRef = useRef(new Map<string, Fish>());
   const pelletsRef = useRef<FoodPellet[]>([]);
