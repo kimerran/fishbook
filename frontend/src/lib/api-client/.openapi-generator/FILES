@@ -1,0 +1,7 @@
+.openapi-generator-ignore
+apis/MetaApi.ts
+apis/index.ts
+index.ts
+models/Model948a42bdb65c02ff487237856eef1afe200Response.ts
+models/index.ts
+runtime.ts
