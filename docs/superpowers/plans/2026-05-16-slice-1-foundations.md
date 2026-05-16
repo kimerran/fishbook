@@ -4,9 +4,9 @@
 
 **Goal:** Stand up the Fishbook monorepo with both services booting, brand system wired, OpenAPI round-trip working, and CI green — no product features.
 
-**Architecture:** Sibling `backend/` (Laravel 12 + PHP 8.3 + Pest) and `frontend/` (Next.js 15 + React 19 + Tailwind 4) directories under one git root. A single `GET /api/v1/health` endpoint on the backend proves the OpenAPI annotation pipeline; a styled landing page at `/` on the frontend proves the brand system. Docker Compose orchestrates Postgres, Redis, MinIO, and both services for local dev. CI runs lint, types, tests, and a "spec/client in sync" check per service.
+**Architecture:** Sibling `backend/` (Laravel 13 + PHP 8.3 + Pest) and `frontend/` (Next.js 16 + React 19 + Tailwind 4) directories under one git root. A single `GET /api/v1/health` endpoint on the backend proves the OpenAPI annotation pipeline; a styled landing page at `/` on the frontend proves the brand system. Docker Compose orchestrates Postgres, Redis, MinIO, and both services for local dev. CI runs lint, types, tests, and a "spec/client in sync" check per service.
 
-**Tech Stack:** Laravel 12, PHP 8.3, Pest, Larastan, Laravel Pint, `darkaonline/l5-swagger`, Laravel Sanctum; Next.js 15, React 19, TypeScript strict, Tailwind 4 (CSS-first), Vitest, happy-dom, `@openapitools/openapi-generator-cli`; Docker Compose, GitHub Actions, Postgres 17, Redis 7, MinIO.
+**Tech Stack:** Laravel 13 (released March 2026), PHP 8.3, Pest, Larastan, Laravel Pint, `darkaonline/l5-swagger`, Laravel Sanctum; Next.js 16 (16.2 LTS), React 19.2, TypeScript strict, Tailwind 4 (CSS-first), Vitest, happy-dom, `@openapitools/openapi-generator-cli`; Docker Compose, GitHub Actions, Postgres 17, Redis 7, MinIO.
 
 **Spec:** [`docs/superpowers/specs/2026-05-16-foundations-design.md`](../specs/2026-05-16-foundations-design.md).
 
@@ -135,13 +135,15 @@ git commit -m "chore: add gitignore and quickstart readme"
 ## Task 2: Backend Laravel scaffold and dependencies
 
 **Files:**
-- Create: `backend/` (entire Laravel 12 scaffold)
+- Create: `backend/` (entire Laravel 13 scaffold)
 
 - [ ] **Step 1: Create the Laravel project**
 
 ```bash
-composer create-project laravel/laravel backend "12.*" --no-interaction
+composer create-project laravel/laravel backend "13.*" --no-interaction
 ```
+
+If Larastan / l5-swagger don't yet have a `^x` constraint that matches Laravel 13 when Task 2 step 3 runs, use `--with-all-dependencies` (already included) plus `--ignore-platform-req=php` only if a maintainer hasn't tagged a compatible release. Prefer waiting/upgrading the dep over downgrading Laravel.
 
 - [ ] **Step 2: Add runtime dependencies**
 
@@ -177,13 +179,13 @@ Expected: creates `tests/Pest.php` and replaces `tests/TestCase.php` shape with 
 cd backend && php artisan --version
 ```
 
-Expected output starts with `Laravel Framework 12.`
+Expected output starts with `Laravel Framework 13.`
 
 - [ ] **Step 7: Commit**
 
 ```bash
 git add backend/
-git commit -m "feat(backend): scaffold Laravel 12 with sanctum, swagger, pest, larastan"
+git commit -m "feat(backend): scaffold Laravel 13 with sanctum, swagger, pest, larastan"
 ```
 
 ---
@@ -194,7 +196,7 @@ git commit -m "feat(backend): scaffold Laravel 12 with sanctum, swagger, pest, l
 - Modify: `backend/.env.example`
 - Modify: `backend/bootstrap/app.php`
 - Modify: `backend/config/database.php`
-- Modify: `backend/config/cors.php` (or create — Laravel 12 may not publish it by default)
+- Modify: `backend/config/cors.php` (or create — Laravel 13 may not publish it by default)
 - Modify: `backend/config/sanctum.php`
 - Modify: `backend/config/hashing.php`
 
@@ -718,7 +720,7 @@ git commit -m "ci(backend): add multi-stage Dockerfile"
 ## Task 8: Frontend Next.js scaffold and dependencies
 
 **Files:**
-- Create: `frontend/` (Next.js 15 scaffold)
+- Create: `frontend/` (Next.js 16 scaffold)
 - Create: `frontend/.nvmrc`
 - Create: `frontend/vitest.config.ts`
 - Create: `frontend/tests/unit/.gitkeep`
@@ -831,7 +833,7 @@ Expected: all three succeed against the create-next-app default page.
 
 ```bash
 git add frontend/
-git commit -m "feat(frontend): scaffold Next.js 15 with vitest, testing-library, openapi-generator"
+git commit -m "feat(frontend): scaffold Next.js 16 with vitest, testing-library, openapi-generator"
 ```
 
 ---

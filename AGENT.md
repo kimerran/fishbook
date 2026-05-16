@@ -11,8 +11,8 @@ You are working in the **Fishbook** monorepo: a virtual-aquarium web app with a 
 Always use the latest stable as of project start. If you upgrade something, upgrade in a dedicated PR with the changelog linked.
 
 ### Backend (`backend/`)
-- **PHP 8.3.x** (8.4 is fine if all deps support it; verify first)
-- **Laravel 12.x** — use Laravel 12's streamlined application skeleton (no `app/Http/Kernel.php` — middleware lives in `bootstrap/app.php`).
+- **PHP 8.3.x** (8.4 is fine if all deps support it; verify first) — Laravel 13's minimum is 8.3.
+- **Laravel 13.x** (released March 2026) — uses the streamlined application skeleton (no `app/Http/Kernel.php` — middleware lives in `bootstrap/app.php`).
 - **Composer 2.7+**
 - **Eloquent ORM** — *the only* DB access layer. No raw queries except in migrations or for documented performance hotspots.
 - **Laravel Sanctum** — token auth.
@@ -26,8 +26,8 @@ Always use the latest stable as of project start. If you upgrade something, upgr
 
 ### Frontend (`frontend/`)
 - **Node 20 LTS** (use the version in `.nvmrc`).
-- **Next.js 15.x** (App Router, React Server Components where it makes sense; the aquarium canvas is a `'use client'` boundary).
-- **React 19.x**.
+- **Next.js 16.x** (16.2 LTS as of project start — App Router, React Server Components where it makes sense; the aquarium canvas is a `'use client'` boundary).
+- **React 19.x** (19.2.x).
 - **TypeScript 5.x** with `"strict": true`, `"noUncheckedIndexedAccess": true`.
 - **Tailwind CSS 4.x**.
 - **Zustand** for client state (aquarium store).

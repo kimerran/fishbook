@@ -24,7 +24,7 @@ Deploy to Railway is **deferred** until external accounts (GitHub org, Railway, 
 
 ### In
 
-- Monorepo with `frontend/` (Next.js 15 + React 19 + TypeScript strict + Tailwind 4) and `backend/` (Laravel 12 + PHP 8.3 + Pest) sibling directories.
+- Monorepo with `frontend/` (Next.js 16 + React 19 + TypeScript strict + Tailwind 4) and `backend/` (Laravel 13 + PHP 8.3 + Pest) sibling directories.
 - `docker-compose.yml` at repo root: `db` (Postgres 17), `redis`, `minio`, `minio-init`, `backend`, `frontend` services with healthchecks.
 - `Makefile` with `up`, `down`, `restart`, `migrate`, `seed`, `test`, `lint`, `fmt`, `swagger`, `api-client` targets.
 - `.env.example` files for both services, verbatim from `SPEC.md` §10.
@@ -91,8 +91,8 @@ fishbook/
 │   │   ├── Http/
 │   │   │   └── Controllers/Api/V1/HealthController.php
 │   │   └── Providers/                       # default Laravel set
-│   ├── bootstrap/app.php                    # L12 streamlined middleware config
-│   ├── config/                              # default L12 set + l5-swagger.php
+│   ├── bootstrap/app.php                    # L13 streamlined middleware config
+│   ├── config/                              # default L13 set + l5-swagger.php
 │   ├── database/
 │   │   ├── migrations/                      # default users / sanctum / jobs / cache only
 │   │   └── seeders/DatabaseSeeder.php       # empty
@@ -139,7 +139,7 @@ Folders not in this tree are **not created in slice 1**. Slice 2+ adds them.
 ### Bootstrap commands
 
 ```bash
-composer create-project laravel/laravel backend "12.*"
+composer create-project laravel/laravel backend "13.*"
 cd backend
 composer require laravel/sanctum darkaonline/l5-swagger
 composer require --dev pestphp/pest pestphp/pest-plugin-laravel larastan/larastan
