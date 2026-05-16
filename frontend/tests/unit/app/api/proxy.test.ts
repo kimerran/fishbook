@@ -19,7 +19,7 @@ describe("ALL /api/proxy/[...path]", () => {
     ironSessionMock.mockResolvedValue({ token: "tk-123", user: { username: "x" } });
 
     const fetchMock = vi.fn(
-      async () =>
+      async (_url: string | URL | Request, _init?: RequestInit) =>
         new Response(JSON.stringify({ ok: true }), {
           status: 200,
           headers: { "content-type": "application/json" },
@@ -33,23 +33,30 @@ describe("ALL /api/proxy/[...path]", () => {
 
     expect(res.status).toBe(200);
     expect(fetchMock).toHaveBeenCalled();
-    const [calledUrl, calledInit] = fetchMock.mock.calls[0]!;
+    const call = fetchMock.mock.calls[0];
+    expect(call).toBeDefined();
+    const [calledUrl, calledInit] = call!;
     expect(String(calledUrl)).toBe("http://backend:8000/api/v1/auth/me");
-    expect((calledInit as RequestInit).headers).toMatchObject({
+    expect(calledInit?.headers).toMatchObject({
       Authorization: "Bearer tk-123",
     });
   });
 
   test("forwards without Authorization when no token", async () => {
     ironSessionMock.mockResolvedValue({});
-    const fetchMock = vi.fn(async () => new Response("ok", { status: 200 }));
+    const fetchMock = vi.fn(
+      async (_url: string | URL | Request, _init?: RequestInit) =>
+        new Response("ok", { status: 200 }),
+    );
     vi.stubGlobal("fetch", fetchMock);
 
     const { GET } = await import("@/app/api/proxy/[...path]/route");
     const req = new Request("http://localhost:3000/api/proxy/health");
     await GET(req, { params: Promise.resolve({ path: ["health"] }) });
 
-    const [, calledInit] = fetchMock.mock.calls[0]!;
-    expect((calledInit as RequestInit).headers).not.toHaveProperty("Authorization");
+    const call = fetchMock.mock.calls[0];
+    expect(call).toBeDefined();
+    const [, calledInit] = call!;
+    expect(calledInit?.headers).not.toHaveProperty("Authorization");
   });
 });
