@@ -14,5 +14,19 @@ export default defineConfig({
     globals: false,
     setupFiles: ["./tests/setup.ts"],
     include: ["tests/**/*.test.{ts,tsx}", "src/**/*.test.{ts,tsx}"],
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "lcov"],
+      include: ["src/**/*.{ts,tsx}"],
+      exclude: [
+        "src/lib/api-client/**",
+        "src/**/*.test.{ts,tsx}",
+        "src/middleware.ts",
+        "src/app/**/layout.tsx",
+        "src/app/**/page.tsx",
+        "src/app/api/health/**",
+      ],
+      thresholds: { statements: 70, lines: 70, functions: 70, branches: 60 },
+    },
   },
 });

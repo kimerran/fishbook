@@ -1,7 +1,14 @@
 .openapi-generator-ignore
+apis/AuthApi.ts
 apis/MetaApi.ts
 apis/index.ts
 index.ts
+models/AuthTokenResponse.ts
+models/ClaimUsernameRequest.ts
+models/LoginRequest.ts
+models/MeResponse.ts
 models/Model948a42bdb65c02ff487237856eef1afe200Response.ts
+models/RegisterRequest.ts
+models/UserResource.ts
 models/index.ts
 runtime.ts

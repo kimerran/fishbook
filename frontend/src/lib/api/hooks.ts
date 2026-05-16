@@ -13,6 +13,7 @@ async function jsonOrThrow(res: Response) {
     err.body = body;
     throw err;
   }
+  if (res.status === 204) return null;
   return res.json();
 }
 

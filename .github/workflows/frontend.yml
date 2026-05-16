@@ -32,7 +32,7 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
-      - run: npm test -- --run
+      - run: npm test -- --run --coverage
       - run: npm run build
       - name: API client is in sync with backend OpenAPI spec
         run: |
