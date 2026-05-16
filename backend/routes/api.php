@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\GoogleAuthController;
 use App\Http\Controllers\Api\V1\HealthController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,7 +18,6 @@ Route::prefix('auth')->group(function () {
     });
 
     // Google OAuth (gated by env in the controller).
-    // TODO: Task 12 — enable once GoogleAuthController is created.
-    // Route::get('/google/redirect', [GoogleAuthController::class, 'redirect']);
-    // Route::get('/google/callback', [GoogleAuthController::class, 'callback']);
+    Route::get('/google/redirect', [GoogleAuthController::class, 'redirect']);
+    Route::get('/google/callback', [GoogleAuthController::class, 'callback']);
 });
