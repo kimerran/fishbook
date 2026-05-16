@@ -1,11 +1,15 @@
 /* tslint:disable */
 /* eslint-disable */
 export * from './AuthTokenResponse';
+export * from './BackgroundCollection';
+export * from './BackgroundResource';
+export * from './BackgroundResourceEnvelope';
 export * from './ClaimUsernameRequest';
 export * from './FishBreedCollection';
 export * from './FishBreedResource';
 export * from './FishResource';
 export * from './FishResourceEnvelope';
+export * from './GenerateBackgroundRequest';
 export * from './LoginRequest';
 export * from './MeResponse';
 export * from './Model948a42bdb65c02ff487237856eef1afe200Response';
