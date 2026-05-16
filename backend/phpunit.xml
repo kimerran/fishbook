@@ -30,6 +30,7 @@
         <env name="DB_USERNAME" value="fishbook"/>
         <env name="DB_PASSWORD" value="fishbook"/>
         <env name="DB_URL" value=""/>
+        <env name="SANCTUM_STATEFUL_DOMAINS" value="never-stateful-in-tests.invalid"/>
         <env name="MAIL_MAILER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
