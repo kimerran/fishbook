@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\BackgroundController;
 use App\Http\Controllers\Api\V1\FishController;
 use App\Http\Controllers\Api\V1\GoogleAuthController;
 use App\Http\Controllers\Api\V1\HealthController;
@@ -31,4 +32,15 @@ Route::get('/fishes/breeds', [FishController::class, 'breeds'])
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('fishes', FishController::class)
         ->where(['fish' => '[0-9]+']);
+
+    Route::get('/backgrounds', [BackgroundController::class, 'index'])
+        ->middleware('throttle:api')->name('backgrounds.index');
+    Route::post('/backgrounds/upload', [BackgroundController::class, 'upload'])
+        ->middleware('throttle:api')->name('backgrounds.upload');
+    Route::post('/backgrounds/generate', [BackgroundController::class, 'generate'])
+        ->middleware('throttle:generate')->name('backgrounds.generate');
+    Route::patch('/backgrounds/{background}/select', [BackgroundController::class, 'select'])
+        ->middleware('throttle:api')->name('backgrounds.select')->where(['background' => '[0-9]+']);
+    Route::delete('/backgrounds/{background}', [BackgroundController::class, 'destroy'])
+        ->middleware('throttle:api')->name('backgrounds.destroy')->where(['background' => '[0-9]+']);
 });
