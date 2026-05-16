@@ -5,7 +5,13 @@ use App\Http\Controllers\Api\V1\BackgroundController;
 use App\Http\Controllers\Api\V1\FishController;
 use App\Http\Controllers\Api\V1\GoogleAuthController;
 use App\Http\Controllers\Api\V1\HealthController;
+use App\Http\Controllers\Api\V1\RepoAquariumController;
 use Illuminate\Support\Facades\Route;
+
+// Slice 5: repo-aquarium owner/repo path-segment constraints (SPEC §16).
+// Misshaped owners/repos miss the route and return 404 — never leak the route table.
+Route::pattern('owner', '[A-Za-z0-9._-]{1,100}');
+Route::pattern('repo', '[A-Za-z0-9._-]{1,100}');
 
 Route::get('/health', HealthController::class)->name('health');
 
@@ -43,4 +49,14 @@ Route::middleware('auth:sanctum')->group(function () {
         ->middleware('throttle:api')->name('backgrounds.select')->where(['background' => '[0-9]+']);
     Route::delete('/backgrounds/{background}', [BackgroundController::class, 'destroy'])
         ->middleware('throttle:api')->name('backgrounds.destroy')->where(['background' => '[0-9]+']);
+});
+
+// Slice 5: GitHub Repo Aquarium endpoints. Global apiPrefix=api/v1 (bootstrap/app.php) handles versioning.
+Route::get('/repos/{owner}/{repo}/aquarium', [RepoAquariumController::class, 'show'])
+    ->middleware('throttle:api')
+    ->name('repos.aquarium.show');
+
+Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
+    Route::post('/repos/{owner}/{repo}/fork-to-my-aquarium', [RepoAquariumController::class, 'fork'])
+        ->name('repos.aquarium.fork');
 });
