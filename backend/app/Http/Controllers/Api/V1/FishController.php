@@ -159,8 +159,10 @@ class FishController extends Controller
             new OA\Response(response: 200, description: 'OK', content: new OA\JsonContent(ref: '#/components/schemas/FishBreedCollection')),
         ],
     )]
-    public function breeds(): AnonymousResourceCollection
+    public function breeds(\Illuminate\Http\Request $request): \Illuminate\Http\JsonResponse
     {
-        return FishBreedResource::collection($this->breeds->all());
+        return FishBreedResource::collection($this->breeds->all())
+            ->response($request)
+            ->header('Cache-Control', 'public, max-age=3600');
     }
 }
