@@ -5,8 +5,6 @@ use App\Exceptions\Auth\WeakPasswordException;
 use App\Models\User;
 use App\Services\Auth\AuthService;
 
-uses(Tests\TestCase::class, Illuminate\Foundation\Testing\RefreshDatabase::class);
-
 it('registers a user with a strong password', function () {
     $service = app(AuthService::class);
 
