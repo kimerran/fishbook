@@ -1,0 +1,51 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Fishbook API",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/api/v1"
+        }
+    ],
+    "paths": {
+        "/health": {
+            "get": {
+                "tags": [
+                    "meta"
+                ],
+                "summary": "Service liveness probe",
+                "operationId": "948a42bdb65c02ff487237856eef1afe",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "ok": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "version": {
+                                            "type": "string",
+                                            "example": "1.0.0"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "meta",
+            "description": "meta"
+        }
+    ]
+}
