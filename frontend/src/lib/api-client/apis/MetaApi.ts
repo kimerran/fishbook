@@ -15,11 +15,11 @@
 
 import * as runtime from '../runtime';
 import type {
-  Model948a42bdb65c02ff487237856eef1afe200Response,
+  HealthResponse,
 } from '../models/index';
 import {
-    Model948a42bdb65c02ff487237856eef1afe200ResponseFromJSON,
-    Model948a42bdb65c02ff487237856eef1afe200ResponseToJSON,
+    HealthResponseFromJSON,
+    HealthResponseToJSON,
 } from '../models/index';
 
 /**
@@ -30,7 +30,7 @@ export class MetaApi extends runtime.BaseAPI {
     /**
      * Service liveness probe
      */
-    async _948a42bdb65c02ff487237856eef1afeRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Model948a42bdb65c02ff487237856eef1afe200Response>> {
+    async getHealthRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<HealthResponse>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -42,14 +42,14 @@ export class MetaApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => Model948a42bdb65c02ff487237856eef1afe200ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => HealthResponseFromJSON(jsonValue));
     }
 
     /**
      * Service liveness probe
      */
-    async _948a42bdb65c02ff487237856eef1afe(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Model948a42bdb65c02ff487237856eef1afe200Response> {
-        const response = await this._948a42bdb65c02ff487237856eef1afeRaw(initOverrides);
+    async getHealth(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<HealthResponse> {
+        const response = await this.getHealthRaw(initOverrides);
         return await response.value();
     }
 

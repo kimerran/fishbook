@@ -16,9 +16,9 @@ models/FishBreedResource.ts
 models/FishResource.ts
 models/FishResourceEnvelope.ts
 models/GenerateBackgroundRequest.ts
+models/HealthResponse.ts
 models/LoginRequest.ts
 models/MeResponse.ts
-models/Model948a42bdb65c02ff487237856eef1afe200Response.ts
 models/PaginatedFishCollection.ts
 models/RegisterRequest.ts
 models/RepoAquariumErrorResponse.ts
