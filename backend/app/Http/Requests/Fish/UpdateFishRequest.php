@@ -35,19 +35,20 @@ class UpdateFishRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nickname'  => ['sometimes', 'string', 'min:1', 'max:40'],
+            'nickname' => ['sometimes', 'string', 'min:1', 'max:40'],
             'color_hex' => ['sometimes', 'string', 'regex:/^#[0-9A-Fa-f]{6}$/'],
-            'size'      => ['sometimes', 'integer', $this->sizeRule()],
-            'breed'     => ['prohibited'],
+            'size' => ['sometimes', 'integer', $this->sizeRule()],
+            'breed' => ['prohibited'],
         ];
     }
 
     private function sizeRule(): ValidationRule
     {
-        /** @var Fish|null $fish */
         $fish = $this->route('fish');
-        $breed = $fish?->breed ?? '';
-        return new class($breed) implements ValidationRule {
+        $breed = $fish instanceof Fish ? $fish->breed : '';
+
+        return new class($breed) implements ValidationRule
+        {
             public function __construct(private readonly string $breed) {}
 
             public function validate(string $attribute, mixed $value, \Closure $fail): void

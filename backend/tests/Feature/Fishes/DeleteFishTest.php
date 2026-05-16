@@ -13,7 +13,7 @@ it('soft-deletes and disappears from index but stays in DB', function () {
 
     $this->getJson('/api/v1/fishes')->assertOk()->assertJsonCount(0, 'data');
 
-    expect(\DB::table('fishes')->where('id', $fish->id)->whereNotNull('deleted_at')->exists())->toBeTrue();
+    expect(DB::table('fishes')->where('id', $fish->id)->whereNotNull('deleted_at')->exists())->toBeTrue();
 });
 
 it('forbids deleting another user’s fish', function () {

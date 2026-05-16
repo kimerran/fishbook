@@ -36,16 +36,17 @@ class StoreFishRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nickname'  => ['required', 'string', 'min:1', 'max:40'],
-            'breed'     => ['required', 'string', $this->breedRule()],
+            'nickname' => ['required', 'string', 'min:1', 'max:40'],
+            'breed' => ['required', 'string', $this->breedRule()],
             'color_hex' => ['required', 'string', 'regex:/^#[0-9A-Fa-f]{6}$/'],
-            'size'      => ['required', 'integer', $this->sizeRule()],
+            'size' => ['required', 'integer', $this->sizeRule()],
         ];
     }
 
     private function breedRule(): ValidationRule
     {
-        return new class implements ValidationRule {
+        return new class implements ValidationRule
+        {
             public function validate(string $attribute, mixed $value, \Closure $fail): void
             {
                 if (! is_string($value) || app(BreedCatalog::class)->find($value) === null) {
@@ -58,7 +59,9 @@ class StoreFishRequest extends FormRequest
     private function sizeRule(): ValidationRule
     {
         $breed = (string) $this->input('breed');
-        return new class($breed) implements ValidationRule {
+
+        return new class($breed) implements ValidationRule
+        {
             public function __construct(private readonly string $breed) {}
 
             public function validate(string $attribute, mixed $value, \Closure $fail): void

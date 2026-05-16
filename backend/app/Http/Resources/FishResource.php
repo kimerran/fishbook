@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Fish;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use OpenApi\Attributes as OA;
@@ -27,16 +28,19 @@ class FishResource extends JsonResource
     /** @return array<string, mixed> */
     public function toArray(Request $request): array
     {
+        /** @var Fish $fish */
+        $fish = $this->resource;
+
         return [
-            'id'         => (string) $this->id,
-            'nickname'   => $this->nickname,
-            'breed'      => $this->breed,
-            'color_hex'  => $this->color_hex,
-            'size'       => (int) $this->size,
-            'source'     => $this->source,
-            'source_ref' => $this->source_ref,
-            'created_at' => $this->created_at?->toIso8601String(),
-            'updated_at' => $this->updated_at?->toIso8601String(),
+            'id' => (string) $fish->id,
+            'nickname' => $fish->nickname,
+            'breed' => $fish->breed,
+            'color_hex' => $fish->color_hex,
+            'size' => (int) $fish->size,
+            'source' => $fish->source,
+            'source_ref' => $fish->source_ref,
+            'created_at' => $fish->created_at?->toIso8601String(),
+            'updated_at' => $fish->updated_at?->toIso8601String(),
         ];
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Fish;
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
 
@@ -20,11 +21,11 @@ it('creates a fish with source=manual and the authed user_id', function () {
         'source_ref' => 'evil/repo',
     ]);
     $r->assertCreated()
-      ->assertJsonPath('data.nickname', 'Blubsworth')
-      ->assertJsonPath('data.source', 'manual')
-      ->assertJsonPath('data.source_ref', null);
+        ->assertJsonPath('data.nickname', 'Blubsworth')
+        ->assertJsonPath('data.source', 'manual')
+        ->assertJsonPath('data.source_ref', null);
 
-    expect(\App\Models\Fish::first()->user_id)->toBe($this->user->id);
+    expect(Fish::first()->user_id)->toBe($this->user->id);
 });
 
 it('rejects unknown breed', function () {

@@ -58,7 +58,7 @@ describe('Fish', () => {
       position: { x: 102, y: 100 },
       eaten: false,
       createdAt: 0,
-    } as any;
+    } as unknown as import('@/lib/aquarium/FoodPellet').FoodPellet;
     f.update(16, [pellet], vp);
     expect(pellet.eaten).toBe(true);
     expect(f.eatingUntil).toBeGreaterThan(0);

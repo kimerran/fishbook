@@ -19,12 +19,12 @@ class FishFactory extends Factory
         $breed = $this->faker->randomElement($catalog);
 
         return [
-            'user_id'    => User::factory(),
-            'nickname'   => $this->faker->firstName(),
-            'breed'      => $breed['id'],
-            'color_hex'  => $breed['default_color'],
-            'size'       => $this->faker->numberBetween($breed['min_size'], $breed['max_size']),
-            'source'     => 'manual',
+            'user_id' => User::factory(),
+            'nickname' => $this->faker->firstName(),
+            'breed' => $breed['id'],
+            'color_hex' => $breed['default_color'],
+            'size' => $this->faker->numberBetween($breed['min_size'], $breed['max_size']),
+            'source' => 'manual',
             'source_ref' => null,
         ];
     }

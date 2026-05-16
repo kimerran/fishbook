@@ -11,7 +11,6 @@ export function HoverTooltip() {
 
   useEffect(() => {
     if (!hoveredId) {
-      setPos(null);
       return;
     }
     const onMove = (e: MouseEvent) => setPos({ x: e.clientX, y: e.clientY });

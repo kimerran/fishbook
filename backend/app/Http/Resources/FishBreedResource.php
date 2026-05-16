@@ -27,13 +27,14 @@ class FishBreedResource extends JsonResource
     {
         /** @var array<string, mixed> $b */
         $b = (array) $this->resource;
+
         return [
-            'id'                       => $b['id'],
-            'label'                    => $b['label'],
-            'min_size'                 => $b['min_size'],
-            'max_size'                 => $b['max_size'],
-            'default_color'            => $b['default_color'],
-            'sprite_key'               => $b['sprite_key'],
+            'id' => $b['id'],
+            'label' => $b['label'],
+            'min_size' => $b['min_size'],
+            'max_size' => $b['max_size'],
+            'default_color' => $b['default_color'],
+            'sprite_key' => $b['sprite_key'],
             'vertical_band_preference' => $b['vertical_band_preference'] ?? null,
         ];
     }

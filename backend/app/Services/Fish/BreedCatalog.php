@@ -13,6 +13,7 @@ class BreedCatalog
     {
         /** @var array<int, array<string, mixed>> $breeds */
         $breeds = $this->config->get('fish_breeds', []);
+
         return $breeds;
     }
 
@@ -24,6 +25,7 @@ class BreedCatalog
                 return $breed;
             }
         }
+
         return null;
     }
 
@@ -33,6 +35,7 @@ class BreedCatalog
         if ($b === null) {
             return $size;
         }
+
         return max($b['min_size'], min($b['max_size'], $size));
     }
 
@@ -49,6 +52,7 @@ class BreedCatalog
         if (preg_match('/^#[0-9A-Fa-f]{6}$/', $colorHex) !== 1) {
             $errors['color_hex'] = ['Color must be #RRGGBB.'];
         }
+
         return $errors;
     }
 }

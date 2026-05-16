@@ -24,13 +24,13 @@ class FishController extends Controller
         tags: ['Fishes'],
         security: [['sanctum' => []]],
         parameters: [
-            new OA\Parameter(name: 'search',    in: 'query', schema: new OA\Schema(type: 'string')),
-            new OA\Parameter(name: 'breed',     in: 'query', schema: new OA\Schema(type: 'string')),
-            new OA\Parameter(name: 'color',     in: 'query', schema: new OA\Schema(type: 'string')),
-            new OA\Parameter(name: 'sort',      in: 'query', schema: new OA\Schema(type: 'string', enum: ['name','breed','created_at','size'])),
-            new OA\Parameter(name: 'direction', in: 'query', schema: new OA\Schema(type: 'string', enum: ['asc','desc'])),
-            new OA\Parameter(name: 'page',      in: 'query', schema: new OA\Schema(type: 'integer', minimum: 1)),
-            new OA\Parameter(name: 'per_page',  in: 'query', schema: new OA\Schema(type: 'integer', minimum: 1, maximum: 100)),
+            new OA\Parameter(name: 'search', in: 'query', schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'breed', in: 'query', schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'color', in: 'query', schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'sort', in: 'query', schema: new OA\Schema(type: 'string', enum: ['name', 'breed', 'created_at', 'size'])),
+            new OA\Parameter(name: 'direction', in: 'query', schema: new OA\Schema(type: 'string', enum: ['asc', 'desc'])),
+            new OA\Parameter(name: 'page', in: 'query', schema: new OA\Schema(type: 'integer', minimum: 1)),
+            new OA\Parameter(name: 'per_page', in: 'query', schema: new OA\Schema(type: 'integer', minimum: 1, maximum: 100)),
         ],
         responses: [
             new OA\Response(response: 200, description: 'OK', content: new OA\JsonContent(ref: '#/components/schemas/PaginatedFishCollection')),
@@ -83,7 +83,7 @@ class FishController extends Controller
         $fish = Fish::create([
             ...$request->validated(),
             'user_id' => $request->user()->id,
-            'source'  => 'manual',
+            'source' => 'manual',
         ]);
 
         return (new FishResource($fish))->response()->setStatusCode(201);

@@ -35,13 +35,16 @@ class Fish extends Model
         ];
     }
 
-    /** @return BelongsTo<User, Fish> */
+    /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    /** @param Builder<Fish> $query */
+    /**
+     * @param  Builder<Fish>  $query
+     * @return Builder<Fish>
+     */
     public function scopeForUser(Builder $query, int $userId): Builder
     {
         return $query->where('user_id', $userId);
