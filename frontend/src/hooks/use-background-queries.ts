@@ -50,7 +50,7 @@ export function useSelectBackgroundMutation() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (id: string) =>
-      backgroundsApi.selectBackground({ background: Number(id) }),
+      backgroundsApi.selectBackground({ background: id }),
     onMutate: async (id: string) => {
       await qc.cancelQueries({ queryKey: LIST_KEY });
       const snapshots = qc.getQueriesData({ queryKey: LIST_KEY });
@@ -76,7 +76,7 @@ export function useDeleteBackgroundMutation() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (id: string) =>
-      backgroundsApi.deleteBackground({ background: Number(id) }),
+      backgroundsApi.deleteBackground({ background: id }),
     onMutate: async (id: string) => {
       await qc.cancelQueries({ queryKey: LIST_KEY });
       const snapshots = qc.getQueriesData({ queryKey: LIST_KEY });

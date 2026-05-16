@@ -29,7 +29,7 @@ import {
 } from '../models/index';
 
 export interface DeleteBackgroundRequest {
-    background: number;
+    background: string;
 }
 
 export interface GenerateBackgroundOperationRequest {
@@ -42,7 +42,7 @@ export interface ListBackgroundsRequest {
 }
 
 export interface SelectBackgroundRequest {
-    background: number;
+    background: string;
 }
 
 export interface UploadBackgroundRequest {

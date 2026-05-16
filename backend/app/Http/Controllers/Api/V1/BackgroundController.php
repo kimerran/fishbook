@@ -103,7 +103,7 @@ class BackgroundController extends Controller
         tags: ['Backgrounds'],
         security: [['sanctum' => []]],
         parameters: [
-            new OA\Parameter(name: 'background', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
+            new OA\Parameter(name: 'background', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'ulid', pattern: '^[0-9A-HJKMNP-TV-Z]{26}$')),
         ],
         responses: [
             new OA\Response(response: 200, description: 'OK', content: new OA\JsonContent(ref: '#/components/schemas/BackgroundResourceEnvelope')),
@@ -125,7 +125,7 @@ class BackgroundController extends Controller
         tags: ['Backgrounds'],
         security: [['sanctum' => []]],
         parameters: [
-            new OA\Parameter(name: 'background', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
+            new OA\Parameter(name: 'background', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'ulid', pattern: '^[0-9A-HJKMNP-TV-Z]{26}$')),
         ],
         responses: [
             new OA\Response(response: 204, description: 'Soft-deleted'),

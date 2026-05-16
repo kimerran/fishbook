@@ -30,7 +30,7 @@ export function useFishesQuery(params: FishListParams = {}) {
 export function useFishQuery(id: string | null) {
   return useQuery({
     queryKey: ['fishes', 'one', id],
-    queryFn: () => fishesApi.getFish({ fish: Number(id) }),
+    queryFn: () => fishesApi.getFish({ fish: id as string }),
     enabled: id !== null,
   });
 }
@@ -64,7 +64,7 @@ export function useUpdateFishMutation() {
   return useMutation({
     mutationFn: ({ id, patch }: { id: string; patch: UpdateFishInput }) =>
       fishesApi.updateFish({
-        fish: Number(id),
+        fish: id,
         updateFishRequest: {
           nickname: patch.nickname,
           colorHex: patch.color_hex,
@@ -78,7 +78,7 @@ export function useUpdateFishMutation() {
 export function useDeleteFishMutation() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => fishesApi.deleteFish({ fish: Number(id) }),
+    mutationFn: (id: string) => fishesApi.deleteFish({ fish: id }),
     onMutate: async (id) => {
       await qc.cancelQueries({ queryKey: ['fishes', 'list'] });
       const snapshots = qc.getQueriesData({ queryKey: ['fishes', 'list'] });

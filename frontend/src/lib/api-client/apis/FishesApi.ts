@@ -39,11 +39,11 @@ export interface CreateFishRequest {
 }
 
 export interface DeleteFishRequest {
-    fish: number;
+    fish: string;
 }
 
 export interface GetFishRequest {
-    fish: number;
+    fish: string;
 }
 
 export interface ListFishesRequest {
@@ -57,7 +57,7 @@ export interface ListFishesRequest {
 }
 
 export interface UpdateFishOperationRequest {
-    fish: number;
+    fish: string;
     updateFishRequest: UpdateFishRequest;
 }
 

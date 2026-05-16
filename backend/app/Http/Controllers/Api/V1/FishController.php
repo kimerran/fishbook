@@ -94,7 +94,7 @@ class FishController extends Controller
         operationId: 'getFish',
         tags: ['Fishes'],
         security: [['sanctum' => []]],
-        parameters: [new OA\Parameter(name: 'fish', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))],
+        parameters: [new OA\Parameter(name: 'fish', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'ulid', pattern: '^[0-9A-HJKMNP-TV-Z]{26}$'))],
         responses: [
             new OA\Response(response: 200, description: 'OK', content: new OA\JsonContent(ref: '#/components/schemas/FishResourceEnvelope')),
             new OA\Response(response: 403, description: 'Forbidden'),
@@ -113,7 +113,7 @@ class FishController extends Controller
         operationId: 'updateFish',
         tags: ['Fishes'],
         security: [['sanctum' => []]],
-        parameters: [new OA\Parameter(name: 'fish', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))],
+        parameters: [new OA\Parameter(name: 'fish', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'ulid', pattern: '^[0-9A-HJKMNP-TV-Z]{26}$'))],
         requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(ref: '#/components/schemas/UpdateFishRequest')),
         responses: [
             new OA\Response(response: 200, description: 'OK', content: new OA\JsonContent(ref: '#/components/schemas/FishResourceEnvelope')),
@@ -135,7 +135,7 @@ class FishController extends Controller
         operationId: 'deleteFish',
         tags: ['Fishes'],
         security: [['sanctum' => []]],
-        parameters: [new OA\Parameter(name: 'fish', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))],
+        parameters: [new OA\Parameter(name: 'fish', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'ulid', pattern: '^[0-9A-HJKMNP-TV-Z]{26}$'))],
         responses: [
             new OA\Response(response: 204, description: 'No content'),
             new OA\Response(response: 403, description: 'Forbidden'),
