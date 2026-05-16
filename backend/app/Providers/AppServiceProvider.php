@@ -44,5 +44,17 @@ class AppServiceProvider extends ServiceProvider
                 optional($request->user())->id ?: $request->ip()
             );
         });
+
+        RateLimiter::for('generate', function (Request $request) {
+            $userId = optional($request->user())->id;
+            $dailyGlobal = (int) config('services.fal.daily_global_limit', 200);
+
+            return [
+                Limit::perHour(10)->by("generate-u:{$userId}")
+                    ->response(fn () => response()->json(['message' => 'Generation rate limit reached. Try again later.'], 429)),
+                Limit::perDay($dailyGlobal)->by('generate-global')
+                    ->response(fn () => response()->json(['message' => 'Daily generation ceiling reached.'], 503, ['Retry-After' => '3600'])),
+            ];
+        });
     }
 }
