@@ -17,6 +17,12 @@
             <directory>app</directory>
         </include>
     </source>
+    <coverage>
+        <include>
+            <directory>app/Services</directory>
+            <directory>app/Http/Controllers</directory>
+        </include>
+    </coverage>
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
