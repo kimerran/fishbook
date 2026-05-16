@@ -11,22 +11,22 @@ beforeEach(function () {
 });
 
 it('updates nickname / color / size', function () {
-    $this->patchJson("/api/v1/fishes/{$this->fish->id}", [
+    $this->patchJson("/api/v1/fishes/{$this->fish->ulid}", [
         'nickname' => 'Newname', 'color_hex' => '#123456', 'size' => 15,
     ])->assertOk()->assertJsonPath('data.nickname', 'Newname');
 });
 
 it('rejects breed change (immutable)', function () {
-    $this->patchJson("/api/v1/fishes/{$this->fish->id}", ['breed' => 'molly'])
+    $this->patchJson("/api/v1/fishes/{$this->fish->ulid}", ['breed' => 'molly'])
         ->assertStatus(422)->assertJsonValidationErrors('breed');
 });
 
 it('rejects size outside the breed range', function () {
-    $this->patchJson("/api/v1/fishes/{$this->fish->id}", ['size' => 99])
+    $this->patchJson("/api/v1/fishes/{$this->fish->ulid}", ['size' => 99])
         ->assertStatus(422)->assertJsonValidationErrors('size');
 });
 
 it('forbids updating another user’s fish', function () {
     $other = Fish::factory()->create();
-    $this->patchJson("/api/v1/fishes/{$other->id}", ['nickname' => 'pwn'])->assertStatus(403);
+    $this->patchJson("/api/v1/fishes/{$other->ulid}", ['nickname' => 'pwn'])->assertStatus(403);
 });

@@ -21,7 +21,7 @@ it('flips prior active to false and selected to true', function () {
     $a = Background::factory()->for($this->user)->create(['is_active' => true]);
     $b = Background::factory()->for($this->user)->create();
 
-    $r = $this->patchJson("/api/v1/backgrounds/{$b->id}/select")->assertOk();
+    $r = $this->patchJson("/api/v1/backgrounds/{$b->ulid}/select")->assertOk();
 
     expect($r->json('data.is_active'))->toBeTrue();
     expect($a->fresh()->is_active)->toBeFalse();
@@ -30,7 +30,7 @@ it('flips prior active to false and selected to true', function () {
 it('forbids selecting another user’s row', function () {
     $other = User::factory()->create();
     $bg = Background::factory()->for($other)->create();
-    $this->patchJson("/api/v1/backgrounds/{$bg->id}/select")->assertStatus(403);
+    $this->patchJson("/api/v1/backgrounds/{$bg->ulid}/select")->assertStatus(403);
 });
 
 it('returns 409 when the partial-unique index is violated', function () {
@@ -47,6 +47,7 @@ it('returns 409 when the partial-unique index is violated', function () {
     // assert the controller's renderer directly: trigger the exception in-process.
     try {
         DB::table('backgrounds')->insert([
+            'ulid' => (string) \Illuminate\Support\Str::ulid(),
             'user_id' => $this->user->id,
             'kind' => 'upload',
             'storage_key' => 'backgrounds/u-race/'.uniqid().'.webp',

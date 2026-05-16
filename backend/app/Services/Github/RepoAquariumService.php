@@ -88,6 +88,7 @@ class RepoAquariumService
 
         $now = now();
         $rows = array_map(fn (array $f) => [
+            'ulid' => (string) \Illuminate\Support\Str::ulid(),
             'user_id' => $user->id,
             'nickname' => $f['nickname'],
             'breed' => $f['breed'],

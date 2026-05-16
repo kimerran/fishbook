@@ -9,7 +9,7 @@ it('soft-deletes and disappears from index but stays in DB', function () {
     Sanctum::actingAs($user);
     $fish = Fish::factory()->for($user)->create();
 
-    $this->deleteJson("/api/v1/fishes/{$fish->id}")->assertNoContent();
+    $this->deleteJson("/api/v1/fishes/{$fish->ulid}")->assertNoContent();
 
     $this->getJson('/api/v1/fishes')->assertOk()->assertJsonCount(0, 'data');
 
@@ -20,13 +20,13 @@ it('forbids deleting another user’s fish', function () {
     $me = User::factory()->create();
     Sanctum::actingAs($me);
     $other = Fish::factory()->create();
-    $this->deleteJson("/api/v1/fishes/{$other->id}")->assertStatus(403);
+    $this->deleteJson("/api/v1/fishes/{$other->ulid}")->assertStatus(403);
 });
 
 it('returns 404 on second delete (idempotency boundary)', function () {
     $user = User::factory()->create();
     Sanctum::actingAs($user);
     $fish = Fish::factory()->for($user)->create();
-    $this->deleteJson("/api/v1/fishes/{$fish->id}")->assertNoContent();
-    $this->deleteJson("/api/v1/fishes/{$fish->id}")->assertStatus(404);
+    $this->deleteJson("/api/v1/fishes/{$fish->ulid}")->assertNoContent();
+    $this->deleteJson("/api/v1/fishes/{$fish->ulid}")->assertStatus(404);
 });

@@ -19,7 +19,7 @@ beforeEach(function () {
 it('soft-deletes and dispatches the purge job with a 7-day delay', function () {
     Queue::fake();
     $bg = Background::factory()->for($this->user)->create();
-    $this->deleteJson("/api/v1/backgrounds/{$bg->id}")->assertNoContent();
+    $this->deleteJson("/api/v1/backgrounds/{$bg->ulid}")->assertNoContent();
 
     expect($bg->fresh()->trashed())->toBeTrue();
     Queue::assertPushed(PurgeBackgroundJob::class, function ($job) use ($bg) {
@@ -42,7 +42,7 @@ it('soft-deletes and dispatches the purge job with a 7-day delay', function () {
 
 it('removes the row from index after delete', function () {
     $bg = Background::factory()->for($this->user)->create();
-    $this->deleteJson("/api/v1/backgrounds/{$bg->id}")->assertNoContent();
+    $this->deleteJson("/api/v1/backgrounds/{$bg->ulid}")->assertNoContent();
     $r = $this->getJson('/api/v1/backgrounds')->assertOk();
     expect($r->json('data'))->toBe([]);
 });
@@ -50,5 +50,5 @@ it('removes the row from index after delete', function () {
 it('forbids deleting another user’s row', function () {
     $other = User::factory()->create();
     $bg = Background::factory()->for($other)->create();
-    $this->deleteJson("/api/v1/backgrounds/{$bg->id}")->assertStatus(403);
+    $this->deleteJson("/api/v1/backgrounds/{$bg->ulid}")->assertStatus(403);
 });
