@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Background;
 use App\Models\User;
 
 class BackgroundPolicy
@@ -11,23 +12,23 @@ class BackgroundPolicy
         return true;
     }
 
-    public function view(User $user, mixed $background): bool
+    public function view(User $user, Background $background): bool
     {
-        return false;
+        return $user->id === $background->user_id || $user->is_admin;
     }
 
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
-    public function update(User $user, mixed $background): bool
+    public function update(User $user, Background $background): bool
     {
-        return false;
+        return $user->id === $background->user_id;
     }
 
-    public function delete(User $user, mixed $background): bool
+    public function delete(User $user, Background $background): bool
     {
-        return false;
+        return $user->id === $background->user_id;
     }
 }
