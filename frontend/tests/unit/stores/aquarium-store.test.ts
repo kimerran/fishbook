@@ -15,7 +15,7 @@ describe('useAquariumStore', () => {
     const s = useAquariumStore.getState();
     s.addFood(10, 20);
     expect(useAquariumStore.getState().food).toHaveLength(1);
-    const id = useAquariumStore.getState().food[0].id;
+    const id = useAquariumStore.getState().food[0]!.id;
     s.consumeFood(id);
     expect(useAquariumStore.getState().food).toHaveLength(0);
   });
