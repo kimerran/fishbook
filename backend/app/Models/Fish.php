@@ -14,6 +14,8 @@ class Fish extends Model
     /** @use HasFactory<FishFactory> */
     use HasFactory, SoftDeletes;
 
+    protected $table = 'fishes';
+
     /** @var list<string> */
     protected $fillable = [
         'user_id',
