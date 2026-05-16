@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\FishController;
 use App\Http\Controllers\Api\V1\GoogleAuthController;
 use App\Http\Controllers\Api\V1\HealthController;
 use Illuminate\Support\Facades\Route;
@@ -20,4 +21,14 @@ Route::prefix('auth')->group(function () {
     // Google OAuth (gated by env in the controller).
     Route::get('/google/redirect', [GoogleAuthController::class, 'redirect']);
     Route::get('/google/callback', [GoogleAuthController::class, 'callback']);
+});
+
+// Public — order-sensitive: declare before the resource so `breeds` does not bind as a fish id.
+Route::get('/fishes/breeds', [FishController::class, 'breeds'])
+    ->middleware('throttle:api')
+    ->name('fishes.breeds');
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('fishes', FishController::class)
+        ->where(['fish' => '[0-9]+']);
 });
