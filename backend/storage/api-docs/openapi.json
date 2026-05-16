@@ -730,6 +730,113 @@
                     }
                 }
             }
+        },
+        "/api/v1/repos/{owner}/{repo}/aquarium": {
+            "get": {
+                "tags": [
+                    "Repo Aquarium"
+                ],
+                "operationId": "getRepoAquarium",
+                "parameters": [
+                    {
+                        "name": "owner",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "repo",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RepoAquariumResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RepoAquariumErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RepoAquariumErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/repos/{owner}/{repo}/fork-to-my-aquarium": {
+            "post": {
+                "tags": [
+                    "Repo Aquarium"
+                ],
+                "operationId": "forkRepoAquarium",
+                "parameters": [
+                    {
+                        "name": "owner",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "repo",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RepoForkResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -1010,6 +1117,98 @@
                 },
                 "type": "object"
             },
+            "RepoStats": {
+                "properties": {
+                    "stars": {
+                        "type": "integer"
+                    },
+                    "forks": {
+                        "type": "integer"
+                    },
+                    "issues": {
+                        "type": "integer"
+                    },
+                    "watchers": {
+                        "type": "integer"
+                    },
+                    "contributors": {
+                        "type": "integer"
+                    },
+                    "language": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "age_days": {
+                        "type": "integer"
+                    },
+                    "fetched_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "RepoFishItem": {
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "breed": {
+                        "type": "string"
+                    },
+                    "color_hex": {
+                        "type": "string"
+                    },
+                    "size": {
+                        "type": "integer"
+                    },
+                    "nickname": {
+                        "type": "string"
+                    },
+                    "source": {
+                        "type": "string"
+                    },
+                    "source_ref": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "RepoAquariumResponse": {
+                "properties": {
+                    "data": {
+                        "properties": {
+                            "stats": {
+                                "$ref": "#/components/schemas/RepoStats"
+                            },
+                            "fish_set": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/RepoFishItem"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "RepoAquariumErrorResponse": {
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "RepoForkResponse": {
+                "properties": {
+                    "added": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
             "UserResource": {
                 "required": [
                     "id",
@@ -1153,6 +1352,10 @@
         {
             "name": "meta",
             "description": "meta"
+        },
+        {
+            "name": "Repo Aquarium",
+            "description": "Repo Aquarium"
         }
     ]
 }

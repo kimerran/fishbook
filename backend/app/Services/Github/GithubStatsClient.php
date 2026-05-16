@@ -59,7 +59,7 @@ class GithubStatsClient
         $this->guard($r);
 
         $link = $r->header('Link');
-        if (is_string($link) && $link !== '' && preg_match('/page=(\d+)>;\s*rel="last"/', $link, $m)) {
+        if ($link !== '' && preg_match('/page=(\d+)>;\s*rel="last"/', $link, $m)) {
             return (int) $m[1];
         }
         $body = $r->json();

@@ -5,9 +5,10 @@ namespace App\Services\Github;
 use App\Models\Fish;
 use App\Models\RepoAquariumCache;
 use App\Models\User;
+use Illuminate\Cache\Repository as CacheRepository;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
+use Illuminate\Contracts\Cache\LockProvider;
 use Illuminate\Contracts\Cache\LockTimeoutException;
-use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -45,8 +46,14 @@ class RepoAquariumService
             return $this->mark($hit, 'db');
         }
 
+        $store = $this->cache()->getStore();
+        if (! $store instanceof LockProvider) {
+            // Cache store doesn't support locks (e.g. array store fallback).
+            return $this->fetchAndStore($owner, $repo, $ttl, $key);
+        }
+
         try {
-            return $this->cache()->lock($lockK, $lockT)->block($block, function () use ($owner, $repo, $ttl, $key) {
+            return $store->lock($lockK, $lockT)->block($block, function () use ($owner, $repo, $ttl, $key) {
                 if (($hit = $this->cache()->get($key)) !== null) {
                     return $this->mark($hit, 'redis');
                 }
@@ -59,9 +66,6 @@ class RepoAquariumService
         } catch (LockTimeoutException) {
             Log::warning('repo_aquarium_lock_timeout', ['owner' => $owner, 'repo' => $repo]);
 
-            return $this->fetchAndStore($owner, $repo, $ttl, $key);
-        } catch (\BadMethodCallException) {
-            // Cache store doesn't support locks (e.g. array store in tests with CACHE_STORE=array).
             return $this->fetchAndStore($owner, $repo, $ttl, $key);
         }
     }
@@ -106,7 +110,10 @@ class RepoAquariumService
 
     private function cache(): CacheRepository
     {
-        return $this->cacheFactory->store('redis');
+        /** @var CacheRepository $store */
+        $store = $this->cacheFactory->store('redis');
+
+        return $store;
     }
 
     private function cacheKey(string $owner, string $repo): string
