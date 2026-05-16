@@ -6,6 +6,8 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Intervention\Image\Drivers\Gd\Driver as GdDriver;
+use Intervention\Image\ImageManager;
 use ZxcvbnPhp\Zxcvbn;
 
 class AppServiceProvider extends ServiceProvider
@@ -16,6 +18,8 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(Zxcvbn::class);
+
+        $this->app->singleton(ImageManager::class, fn () => new ImageManager(new GdDriver));
     }
 
     /**
