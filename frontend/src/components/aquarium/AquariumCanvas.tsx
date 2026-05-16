@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { Fish } from '@/lib/aquarium/Fish';
 import { FoodPellet } from '@/lib/aquarium/FoodPellet';
-import { getTintedSprite } from '@/lib/aquarium/sprite-cache';
+import { getCachedSprite, preloadSprites } from '@/lib/aquarium/sprite-cache';
 import { hashStringToSeed, mulberry32 } from '@/lib/aquarium/seeded-random';
 import { useAquariumStore } from '@/stores/aquarium-store';
 
@@ -68,6 +68,7 @@ export function AquariumCanvas({
     for (const id of Array.from(fishMapRef.current.keys())) {
       if (!seen.has(id)) fishMapRef.current.delete(id);
     }
+    void preloadSprites(fishes.map((f) => ({ breed: f.breed, color_hex: f.color_hex })));
   }, [fishes, breeds]);
 
   // RAF loop — refs only.
@@ -84,7 +85,17 @@ export function AquariumCanvas({
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
     const isHidden = () => document.visibilityState === 'hidden';
 
-    const tick = async (now: number) => {
+    const drawFallbackCircle = (
+      c: CanvasRenderingContext2D,
+      f: Fish,
+    ): void => {
+      c.fillStyle = f.color_hex;
+      c.beginPath();
+      c.arc(f.position.x, f.position.y, f.size + 4, 0, Math.PI * 2);
+      c.fill();
+    };
+
+    const tick = (now: number): void => {
       const dt = lastTimeRef.current ? Math.min(50, now - lastTimeRef.current) : 16;
       lastTimeRef.current = now;
       const { paused } = useAquariumStore.getState();
@@ -98,8 +109,12 @@ export function AquariumCanvas({
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (const f of fishMapRef.current.values()) {
-        const sprite = await getTintedSprite(f.breed, f.color_hex);
-        f.render(ctx, sprite);
+        const sprite = getCachedSprite(f.breed, f.color_hex);
+        if (sprite) {
+          f.render(ctx, sprite);
+        } else {
+          drawFallbackCircle(ctx, f);
+        }
       }
       ctx.fillStyle = 'rgba(245, 158, 11, 0.9)';
       for (const p of pelletsRef.current) {
