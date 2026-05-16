@@ -69,6 +69,10 @@ export function AquariumCanvas({
       if (!seen.has(id)) fishMapRef.current.delete(id);
     }
     void preloadSprites(fishes.map((f) => ({ breed: f.breed, color_hex: f.color_hex })));
+    canvasRef.current?.setAttribute(
+      'data-fish-count',
+      String(fishMapRef.current.size),
+    );
   }, [fishes, breeds]);
 
   // RAF loop — refs only.
@@ -84,6 +88,8 @@ export function AquariumCanvas({
 
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
     const isHidden = () => document.visibilityState === 'hidden';
+
+    const lastPelletCountRef = { current: -1 };
 
     const drawFallbackCircle = (
       c: CanvasRenderingContext2D,
@@ -121,6 +127,10 @@ export function AquariumCanvas({
         ctx.beginPath();
         ctx.arc(p.position.x, p.position.y, 3, 0, Math.PI * 2);
         ctx.fill();
+      }
+      if (pelletsRef.current.length !== lastPelletCountRef.current) {
+        lastPelletCountRef.current = pelletsRef.current.length;
+        canvas.setAttribute('data-pellet-count', String(pelletsRef.current.length));
       }
       rafIdRef.current = requestAnimationFrame(tick);
     };
