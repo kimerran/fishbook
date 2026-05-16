@@ -37,7 +37,6 @@ describe('canvas-perf 100 fish + 20 pellets', () => {
     const budget = 60 * 16.67 * 1.2;
 
     // Soft check: log results but never fail CI on perf miss (avoid runner flake).
-    // eslint-disable-next-line no-console
     console.log(`perf: 60 ticks took ${elapsed.toFixed(1)}ms (budget ${budget.toFixed(1)}ms)`);
     // The simulation budget is intentionally loose; this just sanity-checks that
     // we don't blow up by orders of magnitude (e.g., per-frame allocation regression).

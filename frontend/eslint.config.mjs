@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Generated OpenAPI client — refreshed per backend spec; do not lint.
+    "src/lib/api-client/**",
   ]),
 ]);
 

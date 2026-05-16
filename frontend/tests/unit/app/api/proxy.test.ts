@@ -19,7 +19,7 @@ describe("ALL /api/proxy/[...path]", () => {
     ironSessionMock.mockResolvedValue({ token: "tk-123", user: { username: "x" } });
 
     const fetchMock = vi.fn(
-      async (_url: string | URL | Request, _init?: RequestInit) =>
+      async () =>
         new Response(JSON.stringify({ ok: true }), {
           status: 200,
           headers: { "content-type": "application/json" },
@@ -44,10 +44,7 @@ describe("ALL /api/proxy/[...path]", () => {
 
   test("forwards without Authorization when no token", async () => {
     ironSessionMock.mockResolvedValue({});
-    const fetchMock = vi.fn(
-      async (_url: string | URL | Request, _init?: RequestInit) =>
-        new Response("ok", { status: 200 }),
-    );
+    const fetchMock = vi.fn(async () => new Response("ok", { status: 200 }));
     vi.stubGlobal("fetch", fetchMock);
 
     const { GET } = await import("@/app/api/proxy/[...path]/route");
