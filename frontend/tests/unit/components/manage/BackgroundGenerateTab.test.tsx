@@ -46,7 +46,7 @@ describe('BackgroundGenerateTab', () => {
     });
     fireEvent.click(screen.getByRole('button', { name: /generate/i }));
     await waitFor(() => expect(mutateMock).toHaveBeenCalledTimes(1));
-    expect(mutateMock.mock.calls[0][0]).toMatchObject({
+    expect(mutateMock.mock.calls[0]?.[0]).toMatchObject({
       prompt: 'a calm coral reef at dusk',
       aspect_ratio: '16:9',
     });

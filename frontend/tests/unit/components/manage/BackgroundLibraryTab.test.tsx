@@ -66,14 +66,14 @@ describe('BackgroundLibraryTab', () => {
   it('calls select on click', () => {
     renderTab();
     const selectButtons = screen.getAllByRole('button', { name: /select background/i });
-    fireEvent.click(selectButtons[1]);
+    fireEvent.click(selectButtons[1] as HTMLElement);
     expect(selectMutate).toHaveBeenCalledWith('2');
   });
 
   it('calls delete from the delete control', () => {
     renderTab();
     const delButtons = screen.getAllByRole('button', { name: /delete/i });
-    fireEvent.click(delButtons[0]);
+    fireEvent.click(delButtons[0] as HTMLElement);
     expect(deleteMutate).toHaveBeenCalledWith('1');
   });
 });

@@ -9,7 +9,7 @@ export const generateBackgroundSchema = z.object({
     .trim()
     .min(3, 'At least 3 characters')
     .max(500, 'At most 500 characters'),
-  aspect_ratio: z.enum(aspectRatios).default('16:9'),
+  aspect_ratio: z.enum(aspectRatios),
 });
 
 export type GenerateBackgroundInput = z.infer<typeof generateBackgroundSchema>;
