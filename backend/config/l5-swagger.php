@@ -50,6 +50,7 @@ return [
                     base_path('app/Http/Controllers'),
                     base_path('app/Http/Requests'),
                     base_path('app/Http/Resources'),
+                    base_path('app/OpenApi'),
                 ],
             ],
         ],

@@ -12,11 +12,31 @@ use App\Services\Fish\BreedCatalog;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use OpenApi\Attributes as OA;
 
 class FishController extends Controller
 {
     public function __construct(private readonly BreedCatalog $breeds) {}
 
+    #[OA\Get(
+        path: '/api/v1/fishes',
+        operationId: 'listFishes',
+        tags: ['Fishes'],
+        security: [['sanctum' => []]],
+        parameters: [
+            new OA\Parameter(name: 'search',    in: 'query', schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'breed',     in: 'query', schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'color',     in: 'query', schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'sort',      in: 'query', schema: new OA\Schema(type: 'string', enum: ['name','breed','created_at','size'])),
+            new OA\Parameter(name: 'direction', in: 'query', schema: new OA\Schema(type: 'string', enum: ['asc','desc'])),
+            new OA\Parameter(name: 'page',      in: 'query', schema: new OA\Schema(type: 'integer', minimum: 1)),
+            new OA\Parameter(name: 'per_page',  in: 'query', schema: new OA\Schema(type: 'integer', minimum: 1, maximum: 100)),
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'OK', content: new OA\JsonContent(ref: '#/components/schemas/PaginatedFishCollection')),
+            new OA\Response(response: 401, description: 'Unauthenticated'),
+        ],
+    )]
     public function index(Request $request): AnonymousResourceCollection
     {
         $this->authorize('viewAny', Fish::class);
@@ -44,6 +64,18 @@ class FishController extends Controller
         return FishResource::collection($q->paginate($perPage));
     }
 
+    #[OA\Post(
+        path: '/api/v1/fishes',
+        operationId: 'createFish',
+        tags: ['Fishes'],
+        security: [['sanctum' => []]],
+        requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(ref: '#/components/schemas/StoreFishRequest')),
+        responses: [
+            new OA\Response(response: 201, description: 'Created', content: new OA\JsonContent(ref: '#/components/schemas/FishResourceEnvelope')),
+            new OA\Response(response: 401, description: 'Unauthenticated'),
+            new OA\Response(response: 422, description: 'Validation error'),
+        ],
+    )]
     public function store(StoreFishRequest $request): JsonResponse
     {
         $this->authorize('create', Fish::class);
@@ -57,6 +89,18 @@ class FishController extends Controller
         return (new FishResource($fish))->response()->setStatusCode(201);
     }
 
+    #[OA\Get(
+        path: '/api/v1/fishes/{fish}',
+        operationId: 'getFish',
+        tags: ['Fishes'],
+        security: [['sanctum' => []]],
+        parameters: [new OA\Parameter(name: 'fish', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))],
+        responses: [
+            new OA\Response(response: 200, description: 'OK', content: new OA\JsonContent(ref: '#/components/schemas/FishResourceEnvelope')),
+            new OA\Response(response: 403, description: 'Forbidden'),
+            new OA\Response(response: 404, description: 'Not found'),
+        ],
+    )]
     public function show(Fish $fish): FishResource
     {
         $this->authorize('view', $fish);
@@ -64,6 +108,19 @@ class FishController extends Controller
         return new FishResource($fish);
     }
 
+    #[OA\Patch(
+        path: '/api/v1/fishes/{fish}',
+        operationId: 'updateFish',
+        tags: ['Fishes'],
+        security: [['sanctum' => []]],
+        parameters: [new OA\Parameter(name: 'fish', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))],
+        requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(ref: '#/components/schemas/UpdateFishRequest')),
+        responses: [
+            new OA\Response(response: 200, description: 'OK', content: new OA\JsonContent(ref: '#/components/schemas/FishResourceEnvelope')),
+            new OA\Response(response: 403, description: 'Forbidden'),
+            new OA\Response(response: 422, description: 'Validation error'),
+        ],
+    )]
     public function update(UpdateFishRequest $request, Fish $fish): FishResource
     {
         $this->authorize('update', $fish);
@@ -73,6 +130,18 @@ class FishController extends Controller
         return new FishResource($fish->fresh());
     }
 
+    #[OA\Delete(
+        path: '/api/v1/fishes/{fish}',
+        operationId: 'deleteFish',
+        tags: ['Fishes'],
+        security: [['sanctum' => []]],
+        parameters: [new OA\Parameter(name: 'fish', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))],
+        responses: [
+            new OA\Response(response: 204, description: 'No content'),
+            new OA\Response(response: 403, description: 'Forbidden'),
+            new OA\Response(response: 404, description: 'Not found'),
+        ],
+    )]
     public function destroy(Fish $fish): JsonResponse
     {
         $this->authorize('delete', $fish);
@@ -82,7 +151,14 @@ class FishController extends Controller
         return response()->json(null, 204);
     }
 
-    /** Public endpoint — see routes/api.php. */
+    #[OA\Get(
+        path: '/api/v1/fishes/breeds',
+        operationId: 'listBreeds',
+        tags: ['Fishes'],
+        responses: [
+            new OA\Response(response: 200, description: 'OK', content: new OA\JsonContent(ref: '#/components/schemas/FishBreedCollection')),
+        ],
+    )]
     public function breeds(): AnonymousResourceCollection
     {
         return FishBreedResource::collection($this->breeds->all());
