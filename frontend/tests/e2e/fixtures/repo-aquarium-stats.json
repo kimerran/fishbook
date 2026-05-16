@@ -1,0 +1,12 @@
+{
+  "repo": {
+    "stargazers_count": 116000,
+    "forks_count": 25000,
+    "open_issues_count": 2400,
+    "subscribers_count": 750,
+    "language": "TypeScript",
+    "created_at": "2018-06-01T00:00:00Z"
+  },
+  "contributors_count": 480,
+  "contributors_first_entry": { "login": "vercel", "contributions": 9999 }
+}
