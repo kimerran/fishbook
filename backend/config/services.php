@@ -43,4 +43,16 @@ return [
 
     'google_oauth_enabled' => env('GOOGLE_OAUTH_ENABLED', false),
 
+    'fal' => [
+        'api_key' => env('FAL_API_KEY'),
+        'base_url' => env('FAL_BASE_URL', 'https://queue.fal.run'),
+        'model' => env('FAL_MODEL', 'fal-ai/flux-2/turbo'),
+        'daily_global_limit' => (int) env('FAL_DAILY_GLOBAL_LIMIT', 200),
+        'prompt_denylist' => [
+            'nsfw', 'nude', 'naked', 'explicit', 'porn', 'xxx', 'sexual', 'blood', 'gore',
+        ],
+        'poll_interval_ms' => 1000,
+        'poll_max_seconds' => 60,
+    ],
+
 ];
