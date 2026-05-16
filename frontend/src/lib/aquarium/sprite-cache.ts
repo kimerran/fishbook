@@ -35,7 +35,34 @@ export async function getTintedSprite(
   return off;
 }
 
+export function getCachedSprite(
+  breed: string,
+  colorHex: string,
+): CanvasImageSource | null {
+  const key = `${breed}:${colorHex}`;
+  return cache.get(key) ?? null;
+}
+
+export async function preloadSprites(
+  items: ReadonlyArray<{ breed: string; color_hex: string }>,
+): Promise<void> {
+  const seen = new Set<string>();
+  const promises: Array<Promise<unknown>> = [];
+  for (const { breed, color_hex } of items) {
+    const key = `${breed}:${color_hex}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    if (!cache.has(key)) promises.push(getTintedSprite(breed, color_hex));
+  }
+  await Promise.all(promises);
+}
+
 export function clearSpriteCacheForTests() {
+  cache.clear();
+  imageCache.clear();
+}
+
+export function __resetSpriteCacheForTests(): void {
   cache.clear();
   imageCache.clear();
 }
