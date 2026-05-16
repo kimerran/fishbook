@@ -15,10 +15,14 @@ RUN apk add --no-cache \
       libjpeg-turbo-dev \
       libwebp-dev \
       freetype-dev \
+    && apk add --no-cache --virtual .build-deps \
+      $PHPIZE_DEPS \
+      autoconf \
     && docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp \
     && docker-php-ext-install pdo pdo_pgsql zip intl mbstring gd bcmath \
     && pecl install redis \
-    && docker-php-ext-enable redis
+    && docker-php-ext-enable redis \
+    && apk del .build-deps
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 

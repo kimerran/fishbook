@@ -4,16 +4,26 @@ import { Configuration, FishesApi } from '@/lib/api-client';
 // /api/v1). Route those through the Next.js iron-session proxy at /api/proxy/* — the
 // proxy attaches the bearer token to backend calls. We rewrite /api/v1 → /api/proxy
 // via a fetchApi shim so the generated paths reach the proxy.
+// The generated client concatenates BASE_PATH (/api/v1) + path (/api/v1/foo) producing
+// /api/v1/api/v1/foo. Rewrite both to a single /api/proxy/foo so the proxy reaches the
+// backend at /api/v1/foo correctly.
+const rewritePath = (p: string): string => {
+  let out = p;
+  while (out.startsWith('/api/v1/')) out = '/' + out.slice('/api/v1/'.length);
+  return '/api/proxy' + out;
+};
+
 const proxiedFetch: typeof fetch = (input, init) => {
   if (typeof input === 'string' && input.startsWith('/api/v1/')) {
-    input = '/api/proxy/' + input.slice('/api/v1/'.length);
+    input = rewritePath(input);
   } else if (input instanceof URL && input.pathname.startsWith('/api/v1/')) {
     const u = new URL(input.toString());
-    u.pathname = '/api/proxy/' + u.pathname.slice('/api/v1/'.length);
+    u.pathname = rewritePath(u.pathname);
     input = u;
   } else if (input instanceof Request && input.url.includes('/api/v1/')) {
-    const newUrl = input.url.replace('/api/v1/', '/api/proxy/');
-    input = new Request(newUrl, input);
+    const u = new URL(input.url);
+    u.pathname = rewritePath(u.pathname);
+    input = new Request(u.toString(), input);
   }
   return fetch(input, init);
 };

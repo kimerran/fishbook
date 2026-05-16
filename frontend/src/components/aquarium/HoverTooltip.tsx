@@ -27,6 +27,7 @@ export function HoverTooltip() {
       className="pointer-events-none fixed z-50 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-on-surface font-label-caps text-[12px] tracking-[0.1em] uppercase"
       style={{ left: pos.x + 16, top: pos.y + 16 }}
       role="tooltip"
+      data-testid="hover-tooltip"
     >
       {fish.nickname}
     </div>

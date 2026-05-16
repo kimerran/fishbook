@@ -1,0 +1,56 @@
+# Overlay for E2E (Playwright) and CI runs.
+# Usage: docker compose -f docker-compose.yml -f docker-compose.e2e.yml up -d --build
+#
+# Local devs keep using the base docker-compose.yml hot-reload workflow.
+# CI + Playwright exercise the production build targets via this overlay.
+
+services:
+  backend:
+    build:
+      context: ./backend
+      target: app
+    # Replace base compose mounts entirely (compose-spec !reset).
+    volumes: !reset []
+    env_file: !reset []
+    environment:
+      APP_ENV: testing
+      APP_KEY: base64:QzwZ66e2UB+HJcrwXAdWEzx9NNZuhX84NDGkO2OyoR0=
+      APP_URL: http://localhost:8000
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: fishbook
+      DB_USERNAME: fishbook
+      DB_PASSWORD: fishbook
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: "null"
+      CACHE_STORE: redis
+      QUEUE_CONNECTION: sync
+      SESSION_DRIVER: array
+      AWS_ACCESS_KEY_ID: minioadmin
+      AWS_SECRET_ACCESS_KEY: minioadmin
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_BUCKET: fishbook
+      AWS_ENDPOINT: http://minio:9000
+      AWS_USE_PATH_STYLE_ENDPOINT: "true"
+      AWS_URL: http://localhost:9000/fishbook
+      FILESYSTEM_DISK: s3
+      IRON_PASSWORD: KqL2qFjgmEPCfZ9XAtP3pj6vL3VHzqA8oRrZbQv4
+    command: sh -c "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      target: runner
+    volumes: !reset []
+    env_file: !reset []
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8000/api/v1
+      BACKEND_INTERNAL_URL: http://backend:8000/api/v1
+      SESSION_COOKIE_NAME: fishbook_session
+      SESSION_COOKIE_SECRET: change-me-32-bytes-minimum-development
+      NEXT_PUBLIC_GOOGLE_OAUTH_ENABLED: "false"
+    command: npm run start

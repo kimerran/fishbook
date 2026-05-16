@@ -14,11 +14,11 @@ export async function registerUser(
   };
 
   await page.goto('/register');
-  await page.getByLabel(/username/i).fill(user.username);
-  await page.getByLabel(/email/i).fill(user.email);
-  await page.getByLabel(/^password$/i).fill(user.password);
-  await page.getByLabel(/confirm/i).fill(user.password);
-  await page.getByRole('button', { name: /register|sign up/i }).click();
-  await page.waitForURL(/\/(fish|onboarding)/);
+  await page.locator('input[name="username"]').fill(user.username);
+  await page.locator('input[name="email"]').fill(user.email);
+  await page.locator('input[name="password"]').fill(user.password);
+  await page.locator('input[name="password_confirmation"]').fill(user.password);
+  await page.getByRole('button', { name: /register|sign up|create/i }).click();
+  await page.waitForURL(/\/(fish|onboarding)/, { timeout: 15_000 });
   return user;
 }

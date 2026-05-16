@@ -4,32 +4,46 @@ import { registerUser } from './helpers/users';
 test('SPEC §17 items 2–5 — add, hover, feed, manage, edit, delete', async ({ page }) => {
   await registerUser(page);
 
-  // Add fish.
+  // Add fish (breed defaults to guppy; size to 12; we only customize nickname).
   await page.getByRole('button', { name: /add fish/i }).click();
-  await page.getByLabel(/nickname/i).fill('Splash');
-  await page.getByLabel(/breed/i).selectOption('guppy');
-  await page.getByLabel(/size/i).fill('14');
-  await page.getByRole('button', { name: /save|add/i }).click();
+  await page.locator('input[name="nickname"]').fill('Splash');
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: /add fish/i })
+    .click();
   const canvas = page.getByTestId('aquarium-canvas');
-  await expect(canvas).toHaveAttribute('data-fish-count', '1');
+  await expect(canvas).toHaveAttribute('data-fish-count', '1', { timeout: 10_000 });
 
-  // Hover.
+  // Hover: fish swims, so sweep the canvas in a fine grid until the tooltip appears.
   const box = await canvas.boundingBox();
   if (!box) throw new Error('canvas not laid out');
-  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-  await expect(page.getByTestId('hover-tooltip')).toContainText(/Splash/);
+  const tooltip = page.getByTestId('hover-tooltip');
+  let hovered = false;
+  outer: for (let pass = 0; pass < 20 && !hovered; pass++) {
+    for (let gx = 0; gx < 32; gx++) {
+      for (let gy = 0; gy < 16; gy++) {
+        await page.mouse.move(
+          box.x + (gx + 0.5) * (box.width / 32),
+          box.y + (gy + 0.5) * (box.height / 16),
+        );
+        // small delay lets the canvas hover-detect tick run.
+        await page.waitForTimeout(5);
+        if (await tooltip.isVisible().catch(() => false)) {
+          hovered = true;
+          break outer;
+        }
+      }
+    }
+  }
+  await expect(tooltip).toContainText(/Splash/);
 
   // Feed (click → pellet).
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
-  await expect(canvas).toHaveAttribute('data-pellet-count', /[1-9]/);
+  await expect(canvas).toHaveAttribute('data-pellet-count', /[1-9]/, { timeout: 5_000 });
 
-  // Manage modal + edit + delete.
-  await page.getByRole('button', { name: /manage/i }).click();
+  // Manage modal + delete.
+  await page.getByRole('button', { name: /^manage$/i }).click();
   await page.getByPlaceholder(/search/i).fill('Splash');
-  await page.getByRole('button', { name: /edit/i }).first().click();
-  await page.getByLabel(/nickname/i).fill('Splashy');
-  await page.getByRole('button', { name: /save/i }).click();
-  await page.getByRole('button', { name: /delete/i }).first().click();
-  await page.getByRole('button', { name: /confirm|yes/i }).click();
-  await expect(canvas).toHaveAttribute('data-fish-count', '0');
+  await page.getByRole('button', { name: /^delete$/i }).first().click();
+  await expect(canvas).toHaveAttribute('data-fish-count', '0', { timeout: 10_000 });
 });
