@@ -11,7 +11,7 @@ class BackgroundPolicy
         return true;
     }
 
-    public function view(User $user, $background): bool
+    public function view(User $user, mixed $background): bool
     {
         return false;
     }
@@ -21,12 +21,12 @@ class BackgroundPolicy
         return false;
     }
 
-    public function update(User $user, $background): bool
+    public function update(User $user, mixed $background): bool
     {
         return false;
     }
 
-    public function delete(User $user, $background): bool
+    public function delete(User $user, mixed $background): bool
     {
         return false;
     }

@@ -20,6 +20,7 @@ class GoogleAuthController extends Controller
 
     #[OA\Get(
         path: '/auth/google/redirect',
+        operationId: 'authGoogleRedirect',
         summary: 'Redirect to Google OAuth consent',
         tags: ['auth'],
         responses: [
@@ -31,11 +32,13 @@ class GoogleAuthController extends Controller
     {
         abort_unless(config('services.google_oauth_enabled'), 404);
 
+        /** @phpstan-ignore-next-line method.notFound — stateless() exists on Two\AbstractProvider */
         return Socialite::driver('google')->stateless()->redirect();
     }
 
     #[OA\Get(
         path: '/auth/google/callback',
+        operationId: 'authGoogleCallback',
         summary: 'Receive Google OAuth callback and bootstrap a session',
         tags: ['auth'],
         responses: [
@@ -47,12 +50,13 @@ class GoogleAuthController extends Controller
     {
         abort_unless(config('services.google_oauth_enabled'), 404);
 
+        /** @phpstan-ignore-next-line method.notFound — stateless() exists on Two\AbstractProvider */
         $googleUser = Socialite::driver('google')->stateless()->user();
         $newUser = ! User::where('google_id', $googleUser->getId())->exists();
         $user = $this->google->resolve($googleUser);
         $token = $this->auth->issueToken($user);
 
-        $frontend = rtrim((string) env('FRONTEND_URL', 'http://localhost:3000'), '/');
+        $frontend = rtrim((string) config('app.frontend_url', 'http://localhost:3000'), '/');
 
         return redirect()->away(
             "{$frontend}/auth/google/finish?token={$token}&new=".($newUser ? '1' : '0')

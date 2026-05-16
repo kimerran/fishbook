@@ -27,7 +27,7 @@ class ClaimUsernameRequest extends FormRequest
             'username' => [
                 'required', 'string',
                 'regex:/^[A-Za-z0-9_]{3,32}$/',
-                'unique:users,username,'.($this->user()?->id ?? 'NULL'),
+                'unique:users,username,'.($this->user()->id ?? 'NULL'),
             ],
         ];
     }

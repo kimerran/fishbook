@@ -16,7 +16,7 @@
                     "auth"
                 ],
                 "summary": "Register a new local user",
-                "operationId": "8f20688904ee49d0d8739eeb08faf0b1",
+                "operationId": "authRegister",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -33,15 +33,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "user": {
-                                            "$ref": "#/components/schemas/UserResource"
-                                        },
-                                        "token": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/AuthTokenResponse"
                                 }
                             }
                         }
@@ -61,7 +53,7 @@
                     "auth"
                 ],
                 "summary": "Log in with username and password",
-                "operationId": "985cd5203e2d0a820e113f2f4fdb2847",
+                "operationId": "authLogin",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -78,15 +70,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "user": {
-                                            "$ref": "#/components/schemas/UserResource"
-                                        },
-                                        "token": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/AuthTokenResponse"
                                 }
                             }
                         }
@@ -106,7 +90,7 @@
                     "auth"
                 ],
                 "summary": "Revoke the current Sanctum token",
-                "operationId": "a05022a34eef599e04fb0a5254375b84",
+                "operationId": "authLogout",
                 "responses": {
                     "204": {
                         "description": "No Content"
@@ -128,19 +112,14 @@
                     "auth"
                 ],
                 "summary": "Get the authenticated user",
-                "operationId": "e339e0e74860c0647fd1d41bbbbc13b2",
+                "operationId": "authMe",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "user": {
-                                            "$ref": "#/components/schemas/UserResource"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/MeResponse"
                                 }
                             }
                         }
@@ -162,7 +141,7 @@
                     "auth"
                 ],
                 "summary": "Set username for an OAuth-created user",
-                "operationId": "2f9902ccdf485b54125109a18956f492",
+                "operationId": "authClaimUsername",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -175,7 +154,14 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MeResponse"
+                                }
+                            }
+                        }
                     },
                     "422": {
                         "description": "Validation error"
@@ -194,7 +180,7 @@
                     "auth"
                 ],
                 "summary": "Redirect to Google OAuth consent",
-                "operationId": "92e22e51cfab10e2450d4c6254ba7199",
+                "operationId": "authGoogleRedirect",
                 "responses": {
                     "302": {
                         "description": "Redirect"
@@ -211,7 +197,7 @@
                     "auth"
                 ],
                 "summary": "Receive Google OAuth callback and bootstrap a session",
-                "operationId": "7ea7fc67ac8b67c9152826bfbcde6b23",
+                "operationId": "authGoogleCallback",
                 "responses": {
                     "302": {
                         "description": "Redirect to frontend finish page"
@@ -345,6 +331,32 @@
                     "created_at": {
                         "type": "string",
                         "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "AuthTokenResponse": {
+                "required": [
+                    "user",
+                    "token"
+                ],
+                "properties": {
+                    "user": {
+                        "$ref": "#/components/schemas/UserResource"
+                    },
+                    "token": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "MeResponse": {
+                "required": [
+                    "user"
+                ],
+                "properties": {
+                    "user": {
+                        "$ref": "#/components/schemas/UserResource"
                     }
                 },
                 "type": "object"

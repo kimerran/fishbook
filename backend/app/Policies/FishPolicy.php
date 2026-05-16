@@ -11,7 +11,7 @@ class FishPolicy
         return true;
     }
 
-    public function view(User $user, $fish): bool
+    public function view(User $user, mixed $fish): bool
     {
         return false;
     }
@@ -21,12 +21,12 @@ class FishPolicy
         return false;
     }
 
-    public function update(User $user, $fish): bool
+    public function update(User $user, mixed $fish): bool
     {
         return false;
     }
 
-    public function delete(User $user, $fish): bool
+    public function delete(User $user, mixed $fish): bool
     {
         return false;
     }
