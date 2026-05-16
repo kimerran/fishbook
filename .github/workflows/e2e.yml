@@ -1,0 +1,81 @@
+name: e2e
+
+on:
+  pull_request:
+    paths:
+      - "frontend/**"
+      - "backend/**"
+      - ".github/workflows/e2e.yml"
+      - "docker-compose.yml"
+      - "docker-compose.e2e.yml"
+  push:
+    branches: [main]
+    paths:
+      - "frontend/**"
+      - "backend/**"
+      - ".github/workflows/e2e.yml"
+      - "docker-compose.yml"
+      - "docker-compose.e2e.yml"
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Seed envs
+        run: |
+          cp backend/.env.example backend/.env
+          cp frontend/.env.example frontend/.env
+          # The overlay sets DB/Redis/MinIO hostnames via container service names.
+          # We still need a valid APP_KEY in case any tool reads .env at build time.
+          echo "APP_KEY=base64:$(openssl rand -base64 32)" >> backend/.env
+
+      - name: Build images
+        run: docker compose -f docker-compose.yml -f docker-compose.e2e.yml build
+
+      - name: Bring up stack
+        run: docker compose -f docker-compose.yml -f docker-compose.e2e.yml up -d
+
+      - name: Wait for healthchecks
+        run: |
+          for i in {1..120}; do
+            if curl -fsS http://localhost:8000/api/v1/health \
+              && curl -fsS http://localhost:3000 > /dev/null; then
+              echo healthy && exit 0
+            fi
+            sleep 1
+          done
+          docker compose -f docker-compose.yml -f docker-compose.e2e.yml logs --tail=200
+          exit 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend deps + Playwright browsers
+        working-directory: frontend
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Run Playwright
+        working-directory: frontend
+        run: npx playwright test
+
+      - name: Upload report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: frontend/playwright-report
+          retention-days: 14
+
+      - name: Tear down
+        if: always()
+        run: docker compose -f docker-compose.yml -f docker-compose.e2e.yml down -v
