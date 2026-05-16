@@ -43,6 +43,7 @@ backend/storage/logs/*
 !backend/storage/logs/.gitkeep
 backend/bootstrap/cache/*
 !backend/bootstrap/cache/.gitkeep
+backend/public/storage
 
 # Docker
 docker-compose.override.yml
