@@ -4,3 +4,4 @@ export * from './AuthApi';
 export * from './BackgroundsApi';
 export * from './FishesApi';
 export * from './MetaApi';
+export * from './RepoAquariumApi';

@@ -2,6 +2,7 @@ apis/AuthApi.ts
 apis/BackgroundsApi.ts
 apis/FishesApi.ts
 apis/MetaApi.ts
+apis/RepoAquariumApi.ts
 apis/index.ts
 index.ts
 models/AuthTokenResponse.ts
@@ -19,6 +20,12 @@ models/MeResponse.ts
 models/Model948a42bdb65c02ff487237856eef1afe200Response.ts
 models/PaginatedFishCollection.ts
 models/RegisterRequest.ts
+models/RepoAquariumErrorResponse.ts
+models/RepoAquariumResponse.ts
+models/RepoAquariumResponseData.ts
+models/RepoFishItem.ts
+models/RepoForkResponse.ts
+models/RepoStats.ts
 models/StoreFishRequest.ts
 models/UpdateFishRequest.ts
 models/UserResource.ts
