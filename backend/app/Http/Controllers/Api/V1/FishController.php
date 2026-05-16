@@ -159,7 +159,7 @@ class FishController extends Controller
             new OA\Response(response: 200, description: 'OK', content: new OA\JsonContent(ref: '#/components/schemas/FishBreedCollection')),
         ],
     )]
-    public function breeds(\Illuminate\Http\Request $request): \Illuminate\Http\JsonResponse
+    public function breeds(Request $request): JsonResponse
     {
         return FishBreedResource::collection($this->breeds->all())
             ->response($request)

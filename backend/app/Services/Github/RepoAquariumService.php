@@ -12,6 +12,7 @@ use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class RepoAquariumService
 {
@@ -88,7 +89,7 @@ class RepoAquariumService
 
         $now = now();
         $rows = array_map(fn (array $f) => [
-            'ulid' => (string) \Illuminate\Support\Str::ulid(),
+            'ulid' => (string) Str::ulid(),
             'user_id' => $user->id,
             'nickname' => $f['nickname'],
             'breed' => $f['breed'],

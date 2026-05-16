@@ -6,6 +6,7 @@ use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\Sanctum;
 
 beforeEach(function () {
@@ -47,7 +48,7 @@ it('returns 409 when the partial-unique index is violated', function () {
     // assert the controller's renderer directly: trigger the exception in-process.
     try {
         DB::table('backgrounds')->insert([
-            'ulid' => (string) \Illuminate\Support\Str::ulid(),
+            'ulid' => (string) Str::ulid(),
             'user_id' => $this->user->id,
             'kind' => 'upload',
             'storage_key' => 'backgrounds/u-race/'.uniqid().'.webp',
