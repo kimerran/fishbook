@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Fish;
 use App\Models\User;
 
 class FishPolicy
@@ -11,23 +12,23 @@ class FishPolicy
         return true;
     }
 
-    public function view(User $user, mixed $fish): bool
+    public function view(User $user, Fish $fish): bool
     {
-        return false;
+        return $user->id === $fish->user_id || $user->is_admin;
     }
 
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
-    public function update(User $user, mixed $fish): bool
+    public function update(User $user, Fish $fish): bool
     {
-        return false;
+        return $user->id === $fish->user_id;
     }
 
-    public function delete(User $user, mixed $fish): bool
+    public function delete(User $user, Fish $fish): bool
     {
-        return false;
+        return $user->id === $fish->user_id;
     }
 }
