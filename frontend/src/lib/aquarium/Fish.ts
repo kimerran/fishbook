@@ -94,10 +94,9 @@ export class Fish {
     }
     const aim = chase ?? this.target;
 
-    if (!this.hovered) {
-      this.nextTargetAt -= dtMs;
-      if (this.nextTargetAt <= 0) this.pickNewTarget(vp);
-    }
+    // Hover no longer suppresses target re-pick; the hover effect is a speed clamp below.
+    this.nextTargetAt -= dtMs;
+    if (this.nextTargetAt <= 0) this.pickNewTarget(vp);
 
     // Seek with capped accel.
     const dx = aim.x - this.position.x;
@@ -108,10 +107,11 @@ export class Fish {
     this.velocity.x += ax * dt;
     this.velocity.y += ay * dt;
 
+    const effectiveMax = this.hovered ? this.maxSpeed * 0.15 : this.maxSpeed;
     const speed = Math.hypot(this.velocity.x, this.velocity.y);
-    if (speed > this.maxSpeed) {
-      this.velocity.x = (this.velocity.x / speed) * this.maxSpeed;
-      this.velocity.y = (this.velocity.y / speed) * this.maxSpeed;
+    if (speed > effectiveMax) {
+      this.velocity.x = (this.velocity.x / speed) * effectiveMax;
+      this.velocity.y = (this.velocity.y / speed) * effectiveMax;
     }
 
     this.position.x += this.velocity.x * dt;
