@@ -1,5 +1,13 @@
 <?php
 
+use App\Exceptions\Backgrounds\DimensionsTooSmallException;
+use App\Exceptions\Backgrounds\DisallowedPromptException;
+use App\Exceptions\Backgrounds\FileTooLargeException;
+use App\Exceptions\Backgrounds\InvalidImageException;
+use App\Exceptions\FalAi\FalAiFailedException;
+use App\Exceptions\FalAi\FalAiQuotaException;
+use App\Exceptions\FalAi\FalAiTimeoutException;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,28 +24,28 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->render(function (\App\Exceptions\Backgrounds\DimensionsTooSmallException $e) {
+        $exceptions->render(function (DimensionsTooSmallException $e) {
             return response()->json(['message' => $e->getMessage(), 'errors' => ['image' => [$e->getMessage()]]], 422);
         });
-        $exceptions->render(function (\App\Exceptions\Backgrounds\FileTooLargeException $e) {
+        $exceptions->render(function (FileTooLargeException $e) {
             return response()->json(['message' => $e->getMessage(), 'errors' => ['image' => [$e->getMessage()]]], 422);
         });
-        $exceptions->render(function (\App\Exceptions\Backgrounds\InvalidImageException $e) {
+        $exceptions->render(function (InvalidImageException $e) {
             return response()->json(['message' => $e->getMessage(), 'errors' => ['image' => [$e->getMessage()]]], 422);
         });
-        $exceptions->render(function (\App\Exceptions\Backgrounds\DisallowedPromptException $e) {
+        $exceptions->render(function (DisallowedPromptException $e) {
             return response()->json(['message' => $e->getMessage(), 'errors' => ['prompt' => [$e->getMessage()]]], 422);
         });
-        $exceptions->render(function (\App\Exceptions\FalAi\FalAiTimeoutException $e) {
+        $exceptions->render(function (FalAiTimeoutException $e) {
             return response()->json(['message' => $e->getMessage()], 504);
         });
-        $exceptions->render(function (\App\Exceptions\FalAi\FalAiFailedException $e) {
+        $exceptions->render(function (FalAiFailedException $e) {
             return response()->json(['message' => $e->getMessage()], 502);
         });
-        $exceptions->render(function (\App\Exceptions\FalAi\FalAiQuotaException $e) {
+        $exceptions->render(function (FalAiQuotaException $e) {
             return response()->json(['message' => $e->getMessage()], 429, ['Retry-After' => '3600']);
         });
-        $exceptions->render(function (\Illuminate\Database\QueryException $e) {
+        $exceptions->render(function (QueryException $e) {
             if (str_contains($e->getMessage(), 'one_active_bg_per_user')) {
                 return response()->json(['message' => 'Another select is in progress; retry.'], 409);
             }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Background;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
@@ -28,16 +29,19 @@ class BackgroundResource extends JsonResource
     /** @return array<string,mixed> */
     public function toArray(Request $request): array
     {
+        /** @var Background $bg */
+        $bg = $this->resource;
+
         return [
-            'id' => (string) $this->id,
-            'kind' => $this->kind,
-            'storage_key' => $this->storage_key,
-            'signed_url' => Storage::disk('s3')->temporaryUrl($this->storage_key, now()->addHour()),
-            'width' => (int) $this->width,
-            'height' => (int) $this->height,
-            'prompt' => $this->prompt,
-            'is_active' => (bool) $this->is_active,
-            'created_at' => $this->created_at?->toIso8601String(),
+            'id' => (string) $bg->id,
+            'kind' => $bg->kind,
+            'storage_key' => $bg->storage_key,
+            'signed_url' => Storage::disk('s3')->temporaryUrl($bg->storage_key, now()->addHour()),
+            'width' => (int) $bg->width,
+            'height' => (int) $bg->height,
+            'prompt' => $bg->prompt,
+            'is_active' => (bool) $bg->is_active,
+            'created_at' => $bg->created_at?->toIso8601String(),
         ];
     }
 }

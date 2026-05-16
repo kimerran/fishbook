@@ -1,20 +1,30 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, useSyncExternalStore } from 'react';
 import { useActiveBackgroundQuery } from '@/hooks/use-background-queries';
+
+const reducedMotionStore = {
+  subscribe: (cb: () => void) => {
+    if (typeof window === 'undefined') return () => undefined;
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    mq.addEventListener('change', cb);
+    return () => mq.removeEventListener('change', cb);
+  },
+  getSnapshot: () =>
+    typeof window === 'undefined'
+      ? false
+      : window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  getServerSnapshot: () => false,
+};
 
 export function BackgroundLayer() {
   const active = useActiveBackgroundQuery();
   const [loaded, setLoaded] = useState(false);
-  const [reduced, setReduced] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setReduced(mq.matches);
-    const onChange = () => setReduced(mq.matches);
-    mq.addEventListener('change', onChange);
-    return () => mq.removeEventListener('change', onChange);
-  }, []);
+  const reduced = useSyncExternalStore(
+    reducedMotionStore.subscribe,
+    reducedMotionStore.getSnapshot,
+    reducedMotionStore.getServerSnapshot,
+  );
 
   if (!active) {
     return (

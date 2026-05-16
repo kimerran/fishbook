@@ -30,7 +30,7 @@ it('soft-deletes and dispatches the purge job with a 7-day delay', function () {
         if ($delay === null) {
             return false;
         }
-        if ($delay instanceof \DateTimeInterface) {
+        if ($delay instanceof DateTimeInterface) {
             $secs = $delay->getTimestamp() - now()->getTimestamp();
         } else {
             $secs = (int) $delay;

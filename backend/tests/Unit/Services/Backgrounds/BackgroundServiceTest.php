@@ -30,7 +30,7 @@ it('delete soft-deletes and dispatches purge with 7-day delay', function () {
             return false;
         }
         // Delay may be DateTimeInterface or int seconds.
-        if ($delay instanceof \DateTimeInterface) {
+        if ($delay instanceof DateTimeInterface) {
             $secs = $delay->getTimestamp() - now()->getTimestamp();
         } else {
             $secs = (int) $delay;

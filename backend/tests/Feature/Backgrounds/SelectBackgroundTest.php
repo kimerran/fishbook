@@ -2,6 +2,8 @@
 
 use App\Models\Background;
 use App\Models\User;
+use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\Sanctum;
@@ -44,7 +46,7 @@ it('returns 409 when the partial-unique index is violated', function () {
     // We can't define an ad-hoc route here without polluting the app, so instead
     // assert the controller's renderer directly: trigger the exception in-process.
     try {
-        \Illuminate\Support\Facades\DB::table('backgrounds')->insert([
+        DB::table('backgrounds')->insert([
             'user_id' => $this->user->id,
             'kind' => 'upload',
             'storage_key' => 'backgrounds/u-race/'.uniqid().'.webp',
@@ -56,10 +58,10 @@ it('returns 409 when the partial-unique index is violated', function () {
             'updated_at' => now(),
         ]);
         $this->fail('Expected QueryException for partial unique index');
-    } catch (\Illuminate\Database\QueryException $e) {
+    } catch (QueryException $e) {
         expect($e->getMessage())->toContain('one_active_bg_per_user');
         // Confirm the renderer maps to 409.
-        $response = app(\Illuminate\Contracts\Debug\ExceptionHandler::class)
+        $response = app(ExceptionHandler::class)
             ->render(request(), $e);
         expect($response->getStatusCode())->toBe(409);
     }
