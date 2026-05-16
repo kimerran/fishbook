@@ -13,7 +13,7 @@ use OpenApi\Attributes as OA;
     type: 'object',
     required: ['id', 'kind', 'storage_key', 'signed_url', 'width', 'height', 'is_active', 'created_at'],
     properties: [
-        new OA\Property(property: 'id', type: 'string'),
+        new OA\Property(property: 'id', type: 'string', format: 'ulid', pattern: '^[0-9A-HJKMNP-TV-Z]{26}$', example: '01HG5W7DZ8KX9F3N2VYRMPQABT'),
         new OA\Property(property: 'kind', type: 'string', enum: ['upload', 'generated', 'preset']),
         new OA\Property(property: 'storage_key', type: 'string'),
         new OA\Property(property: 'signed_url', type: 'string', format: 'uri'),
@@ -33,7 +33,7 @@ class BackgroundResource extends JsonResource
         $bg = $this->resource;
 
         return [
-            'id' => (string) $bg->id,
+            'id' => $bg->ulid,
             'kind' => $bg->kind,
             'storage_key' => $bg->storage_key,
             'signed_url' => Storage::disk('s3')->temporaryUrl($bg->storage_key, now()->addHour()),

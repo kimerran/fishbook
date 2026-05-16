@@ -12,7 +12,7 @@ use OpenApi\Attributes as OA;
     type: 'object',
     required: ['id', 'nickname', 'breed', 'color_hex', 'size', 'source', 'created_at', 'updated_at'],
     properties: [
-        new OA\Property(property: 'id', type: 'string'),
+        new OA\Property(property: 'id', type: 'string', format: 'ulid', pattern: '^[0-9A-HJKMNP-TV-Z]{26}$', example: '01HG5W7DZ8KX9F3N2VYRMPQABT'),
         new OA\Property(property: 'nickname', type: 'string'),
         new OA\Property(property: 'breed', type: 'string'),
         new OA\Property(property: 'color_hex', type: 'string'),
@@ -32,7 +32,7 @@ class FishResource extends JsonResource
         $fish = $this->resource;
 
         return [
-            'id' => (string) $fish->id,
+            'id' => $fish->ulid,
             'nickname' => $fish->nickname,
             'breed' => $fish->breed,
             'color_hex' => $fish->color_hex,
