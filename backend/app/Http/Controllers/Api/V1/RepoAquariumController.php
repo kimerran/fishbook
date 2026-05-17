@@ -18,7 +18,7 @@ class RepoAquariumController extends Controller
     public function __construct(private readonly RepoAquariumService $service) {}
 
     #[OA\Get(
-        path: '/api/v1/repos/{owner}/{repo}/aquarium',
+        path: '/repos/{owner}/{repo}/aquarium',
         operationId: 'getRepoAquarium',
         tags: ['Repo Aquarium'],
         parameters: [
@@ -48,7 +48,7 @@ class RepoAquariumController extends Controller
     }
 
     #[OA\Post(
-        path: '/api/v1/repos/{owner}/{repo}/fork-to-my-aquarium',
+        path: '/repos/{owner}/{repo}/fork-to-my-aquarium',
         operationId: 'forkRepoAquarium',
         tags: ['Repo Aquarium'],
         security: [['sanctum' => []]],

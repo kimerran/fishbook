@@ -19,7 +19,7 @@ class FishController extends Controller
     public function __construct(private readonly BreedCatalog $breeds) {}
 
     #[OA\Get(
-        path: '/api/v1/fishes',
+        path: '/fishes',
         operationId: 'listFishes',
         tags: ['Fishes'],
         security: [['sanctum' => []]],
@@ -65,7 +65,7 @@ class FishController extends Controller
     }
 
     #[OA\Post(
-        path: '/api/v1/fishes',
+        path: '/fishes',
         operationId: 'createFish',
         tags: ['Fishes'],
         security: [['sanctum' => []]],
@@ -90,7 +90,7 @@ class FishController extends Controller
     }
 
     #[OA\Get(
-        path: '/api/v1/fishes/{fish}',
+        path: '/fishes/{fish}',
         operationId: 'getFish',
         tags: ['Fishes'],
         security: [['sanctum' => []]],
@@ -109,7 +109,7 @@ class FishController extends Controller
     }
 
     #[OA\Patch(
-        path: '/api/v1/fishes/{fish}',
+        path: '/fishes/{fish}',
         operationId: 'updateFish',
         tags: ['Fishes'],
         security: [['sanctum' => []]],
@@ -131,7 +131,7 @@ class FishController extends Controller
     }
 
     #[OA\Delete(
-        path: '/api/v1/fishes/{fish}',
+        path: '/fishes/{fish}',
         operationId: 'deleteFish',
         tags: ['Fishes'],
         security: [['sanctum' => []]],
@@ -152,7 +152,7 @@ class FishController extends Controller
     }
 
     #[OA\Get(
-        path: '/api/v1/fishes/breeds',
+        path: '/fishes/breeds',
         operationId: 'listBreeds',
         tags: ['Fishes'],
         responses: [

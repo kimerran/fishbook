@@ -83,7 +83,7 @@ export class FishesApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/api/v1/fishes`,
+            path: `/fishes`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -115,7 +115,7 @@ export class FishesApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/v1/fishes/{fish}`.replace(`{${"fish"}}`, encodeURIComponent(String(requestParameters['fish']))),
+            path: `/fishes/{fish}`.replace(`{${"fish"}}`, encodeURIComponent(String(requestParameters['fish']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -145,7 +145,7 @@ export class FishesApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/v1/fishes/{fish}`.replace(`{${"fish"}}`, encodeURIComponent(String(requestParameters['fish']))),
+            path: `/fishes/{fish}`.replace(`{${"fish"}}`, encodeURIComponent(String(requestParameters['fish']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -169,7 +169,7 @@ export class FishesApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/v1/fishes/breeds`,
+            path: `/fishes/breeds`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -221,7 +221,7 @@ export class FishesApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/v1/fishes`,
+            path: `/fishes`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -261,7 +261,7 @@ export class FishesApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/api/v1/fishes/{fish}`.replace(`{${"fish"}}`, encodeURIComponent(String(requestParameters['fish']))),
+            path: `/fishes/{fish}`.replace(`{${"fish"}}`, encodeURIComponent(String(requestParameters['fish']))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,

@@ -69,7 +69,7 @@ export class BackgroundsApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/v1/backgrounds/{background}`.replace(`{${"background"}}`, encodeURIComponent(String(requestParameters['background']))),
+            path: `/backgrounds/{background}`.replace(`{${"background"}}`, encodeURIComponent(String(requestParameters['background']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -101,7 +101,7 @@ export class BackgroundsApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/api/v1/backgrounds/generate`,
+            path: `/backgrounds/generate`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -134,7 +134,7 @@ export class BackgroundsApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/v1/backgrounds`,
+            path: `/backgrounds`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -165,7 +165,7 @@ export class BackgroundsApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/v1/backgrounds/{background}/select`.replace(`{${"background"}}`, encodeURIComponent(String(requestParameters['background']))),
+            path: `/backgrounds/{background}/select`.replace(`{${"background"}}`, encodeURIComponent(String(requestParameters['background']))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
@@ -216,7 +216,7 @@ export class BackgroundsApi extends runtime.BaseAPI {
         }
 
         const response = await this.request({
-            path: `/api/v1/backgrounds/upload`,
+            path: `/backgrounds/upload`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

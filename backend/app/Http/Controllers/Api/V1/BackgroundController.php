@@ -19,7 +19,7 @@ class BackgroundController extends Controller
     public function __construct(private readonly BackgroundService $service) {}
 
     #[OA\Get(
-        path: '/api/v1/backgrounds',
+        path: '/backgrounds',
         operationId: 'listBackgrounds',
         tags: ['Backgrounds'],
         security: [['sanctum' => []]],
@@ -45,7 +45,7 @@ class BackgroundController extends Controller
     }
 
     #[OA\Post(
-        path: '/api/v1/backgrounds/upload',
+        path: '/backgrounds/upload',
         operationId: 'uploadBackground',
         tags: ['Backgrounds'],
         security: [['sanctum' => []]],
@@ -70,7 +70,7 @@ class BackgroundController extends Controller
     }
 
     #[OA\Post(
-        path: '/api/v1/backgrounds/generate',
+        path: '/backgrounds/generate',
         operationId: 'generateBackground',
         tags: ['Backgrounds'],
         security: [['sanctum' => []]],
@@ -98,7 +98,7 @@ class BackgroundController extends Controller
     }
 
     #[OA\Patch(
-        path: '/api/v1/backgrounds/{background}/select',
+        path: '/backgrounds/{background}/select',
         operationId: 'selectBackground',
         tags: ['Backgrounds'],
         security: [['sanctum' => []]],
@@ -120,7 +120,7 @@ class BackgroundController extends Controller
     }
 
     #[OA\Delete(
-        path: '/api/v1/backgrounds/{background}',
+        path: '/backgrounds/{background}',
         operationId: 'deleteBackground',
         tags: ['Backgrounds'],
         security: [['sanctum' => []]],

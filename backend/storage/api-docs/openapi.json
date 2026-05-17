@@ -174,7 +174,7 @@
                 ]
             }
         },
-        "/api/v1/backgrounds": {
+        "/backgrounds": {
             "get": {
                 "tags": [
                     "Backgrounds"
@@ -221,7 +221,7 @@
                 ]
             }
         },
-        "/api/v1/backgrounds/upload": {
+        "/backgrounds/upload": {
             "post": {
                 "tags": [
                     "Backgrounds"
@@ -262,7 +262,7 @@
                 ]
             }
         },
-        "/api/v1/backgrounds/generate": {
+        "/backgrounds/generate": {
             "post": {
                 "tags": [
                     "Backgrounds"
@@ -309,7 +309,7 @@
                 ]
             }
         },
-        "/api/v1/backgrounds/{background}/select": {
+        "/backgrounds/{background}/select": {
             "patch": {
                 "tags": [
                     "Backgrounds"
@@ -358,7 +358,7 @@
                 ]
             }
         },
-        "/api/v1/backgrounds/{background}": {
+        "/backgrounds/{background}": {
             "delete": {
                 "tags": [
                     "Backgrounds"
@@ -397,7 +397,7 @@
                 ]
             }
         },
-        "/api/v1/fishes": {
+        "/fishes": {
             "get": {
                 "tags": [
                     "Fishes"
@@ -528,7 +528,7 @@
                 ]
             }
         },
-        "/api/v1/fishes/{fish}": {
+        "/fishes/{fish}": {
             "get": {
                 "tags": [
                     "Fishes"
@@ -656,7 +656,7 @@
                 ]
             }
         },
-        "/api/v1/fishes/breeds": {
+        "/fishes/breeds": {
             "get": {
                 "tags": [
                     "Fishes"
@@ -731,7 +731,7 @@
                 }
             }
         },
-        "/api/v1/repos/{owner}/{repo}/aquarium": {
+        "/repos/{owner}/{repo}/aquarium": {
             "get": {
                 "tags": [
                     "Repo Aquarium"
@@ -789,7 +789,7 @@
                 }
             }
         },
-        "/api/v1/repos/{owner}/{repo}/fork-to-my-aquarium": {
+        "/repos/{owner}/{repo}/fork-to-my-aquarium": {
             "post": {
                 "tags": [
                     "Repo Aquarium"

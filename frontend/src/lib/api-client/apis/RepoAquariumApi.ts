@@ -65,7 +65,7 @@ export class RepoAquariumApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/v1/repos/{owner}/{repo}/fork-to-my-aquarium`.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner']))).replace(`{${"repo"}}`, encodeURIComponent(String(requestParameters['repo']))),
+            path: `/repos/{owner}/{repo}/fork-to-my-aquarium`.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner']))).replace(`{${"repo"}}`, encodeURIComponent(String(requestParameters['repo']))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -103,7 +103,7 @@ export class RepoAquariumApi extends runtime.BaseAPI {
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/v1/repos/{owner}/{repo}/aquarium`.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner']))).replace(`{${"repo"}}`, encodeURIComponent(String(requestParameters['repo']))),
+            path: `/repos/{owner}/{repo}/aquarium`.replace(`{${"owner"}}`, encodeURIComponent(String(requestParameters['owner']))).replace(`{${"repo"}}`, encodeURIComponent(String(requestParameters['repo']))),
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
