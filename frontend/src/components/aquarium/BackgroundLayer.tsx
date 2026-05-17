@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useSyncExternalStore } from 'react';
 import { useActiveBackgroundQuery } from '@/hooks/use-background-queries';
 
@@ -41,12 +42,18 @@ export function BackgroundLayer() {
 
   return (
     <>
-      <img
+      {/* Background images are R2/S3-issued signed URLs with known dimensions stored on
+          the backgrounds row. next/image gives us AVIF/WebP conversion + priority
+          loading. Hostname allowlist lives in next.config.ts -> images.remotePatterns. */}
+      <Image
         src={active.signedUrl}
         alt=""
-        role="presentation"
+        fill
+        priority
+        sizes="100vw"
+        unoptimized
         onLoad={() => setLoaded(true)}
-        className={`fixed inset-0 -z-10 pointer-events-none w-screen h-screen object-cover ${transition} ${opacity}`}
+        className={`fixed inset-0 -z-10 pointer-events-none object-cover ${transition} ${opacity}`}
       />
       <div
         className="fixed inset-0 -z-10 pointer-events-none bg-white/20 backdrop-blur-[4px]"
