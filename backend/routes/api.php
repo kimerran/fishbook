@@ -19,6 +19,12 @@ Route::pattern('background', '[0-9A-HJKMNP-TV-Z]{26}');
 
 Route::get('/health', HealthController::class)->name('health');
 
+// Serves the committed OpenAPI spec for /api-docs (swagger-ui-react).
+Route::get('/openapi.json', fn () => response()->file(storage_path('api-docs/openapi.json'), [
+    'Content-Type' => 'application/json',
+    'Cache-Control' => 'public, max-age=300',
+]))->name('openapi.json');
+
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:auth');
     Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:auth');
