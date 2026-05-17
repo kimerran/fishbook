@@ -1,5 +1,8 @@
 <?php
 
+use App\Logging\SentryEventScrubber;
+use Sentry\Event;
+
 /**
  * Sentry Laravel SDK configuration file.
  *
@@ -34,7 +37,7 @@ return [
 
     // Scrub sensitive request fields (Authorization headers, password, token, api_key, FAL_API_KEY)
     // before any event leaves the process. See AGENT.md §4 / SPEC §16.
-    'before_send' => static fn (\Sentry\Event $event): ?\Sentry\Event => (new \App\Logging\SentryEventScrubber)($event),
+    'before_send' => static fn (Event $event): Event => (new SentryEventScrubber)($event),
 
     // @see: https://docs.sentry.io/platforms/php/guides/laravel/configuration/options/#profiles_sample_rate
     'profiles_sample_rate' => env('SENTRY_PROFILES_SAMPLE_RATE') === null ? null : (float) env('SENTRY_PROFILES_SAMPLE_RATE'),

@@ -10,7 +10,9 @@ describe('Sentry beforeSend scrubber', () => {
     const ev = {
       request: { headers: { authorization: 'Bearer abc' } },
     } as unknown as Event;
-    const out = send(ev, {} as never) as { request: { headers: { authorization: string } } };
+    const out = send(ev, {} as never) as unknown as {
+      request: { headers: { authorization: string } };
+    };
     expect(out.request.headers.authorization).toBe('[REDACTED]');
   });
 
@@ -19,7 +21,9 @@ describe('Sentry beforeSend scrubber', () => {
     const ev = {
       request: { headers: { Cookie: 'session=xyz' } },
     } as unknown as Event;
-    const out = send(ev, {} as never) as { request: { headers: Record<string, string> } };
+    const out = send(ev, {} as never) as unknown as {
+      request: { headers: Record<string, string> };
+    };
     expect(out.request.headers.Cookie).toBe('[REDACTED]');
   });
 
@@ -30,7 +34,7 @@ describe('Sentry beforeSend scrubber', () => {
         data: { password: 'hunter2', token: 't', api_key: 'k' },
       },
     } as unknown as Event;
-    const out = send(ev, {} as never) as {
+    const out = send(ev, {} as never) as unknown as {
       request: { data: Record<string, string> };
     };
     expect(out.request.data.password).toBe('[REDACTED]');
@@ -43,7 +47,9 @@ describe('Sentry beforeSend scrubber', () => {
     const ev = {
       extra: { password: 'p', api_key: 'k', other: 'fine' },
     } as unknown as Event;
-    const out = send(ev, {} as never) as { extra: Record<string, string> };
+    const out = send(ev, {} as never) as unknown as {
+      extra: Record<string, string>;
+    };
     expect(out.extra.password).toBe('[REDACTED]');
     expect(out.extra.api_key).toBe('[REDACTED]');
     expect(out.extra.other).toBe('fine');

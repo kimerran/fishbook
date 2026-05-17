@@ -26,6 +26,10 @@ export function AddFishDialog({
     resolver: zodResolver(createFishSchema),
     defaultValues: { nickname: '', breed: 'guppy', color_hex: '#FF6B9D', size: 12 },
   });
+  // react-compiler doesn't understand react-hook-form's watch() function (it
+  // returns a fresh subscription rather than a memoized value); safe to bypass
+  // for form fields — the component re-renders on each form change anyway.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const breedId = watch('breed');
   const breed = breeds?.data?.find((b) => b.id === breedId);
 

@@ -28,7 +28,7 @@ final class SentryEventScrubber
 
     private const REDACTED = '[REDACTED]';
 
-    public function __invoke(Event $event): ?Event
+    public function __invoke(Event $event): Event
     {
         $request = $event->getRequest();
 

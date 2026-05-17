@@ -15,7 +15,7 @@ Artisan::command('fishbook:sentry-smoke', function () {
         return 1;
     }
 
-    throw new \RuntimeException('Sentry smoke (intentional)');
+    throw new RuntimeException('Sentry smoke (intentional)');
 })->purpose('Throw an exception to validate Sentry wiring; non-production only.');
 
 Schedule::command('backgrounds:purge-orphans')->dailyAt('03:00');
