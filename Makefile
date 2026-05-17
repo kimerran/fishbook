@@ -1,4 +1,4 @@
-.PHONY: up down restart migrate seed test lint fmt swagger api-client build-images
+.PHONY: up down restart migrate seed test lint fmt swagger api-client build-images deploy-prod smoke
 
 up:
 	docker compose up -d
@@ -40,3 +40,21 @@ api-client:
 build-images:
 	docker build -t fishbook-backend:slice1 backend/
 	docker build -t fishbook-frontend:slice1 frontend/
+
+deploy-prod:
+	@echo "Production deploys are tag-triggered. See README §Deployment."
+	@echo "Push a v* tag (e.g. 'git tag v1.0.0 && git push origin v1.0.0')"
+	@echo "to fire .github/workflows/deploy.yml."
+
+# HOST defaults to local; override for prod, e.g. `make smoke HOST=https://api.fishbook.neri.ph`.
+HOST ?= http://localhost:8000
+smoke:
+	@set -e; \
+	echo "[smoke] $(HOST)/api/v1/health"; \
+	curl -fsS "$(HOST)/api/v1/health" > /dev/null; \
+	echo "[smoke] $(HOST)/api/v1/openapi.json"; \
+	curl -fsS "$(HOST)/api/v1/openapi.json" > /dev/null; \
+	echo "[smoke] $(HOST)/api/v1/fishes/breeds"; \
+	curl -fsS "$(HOST)/api/v1/fishes/breeds" > /dev/null; \
+	echo "[smoke] All probes returned 200."
+	@echo "Optional: GET /api/v1/repos/{owner}/{repo}/aquarium requires Redis + GitHub access; run by hand if needed."
