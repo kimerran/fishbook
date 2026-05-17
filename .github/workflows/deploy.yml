@@ -1,0 +1,94 @@
+# Fishbook deploy workflow (SPEC §13, §14).
+#
+# Triggered on `v*` tag push. Slice 7 (v1-rc1) does NOT push this tag — that's
+# an operational decision. The first real run lands when the operator runs
+# `git push origin v1-rc1` (or a later version tag) after provisioning Railway.
+#
+# Required GitHub Actions secrets:
+#   RAILWAY_TOKEN — a Railway project-scoped token (Project Settings → Tokens).
+#
+# Required Railway service envvars (set via Railway dashboard, NOT in this repo):
+#   Backend service:
+#     APP_ENV=production
+#     APP_KEY (php artisan key:generate output)
+#     APP_URL=https://api.fishbook.neri.ph
+#     FRONTEND_URL=https://fishbook.neri.ph
+#     DB_* (Postgres add-on auto-injects DATABASE_URL; map to DB_*)
+#     REDIS_* (Redis add-on auto-injects)
+#     AWS_* (R2/S3 keys + bucket)
+#     SANCTUM_STATEFUL_DOMAINS=fishbook.neri.ph
+#     SESSION_DOMAIN=.fishbook.neri.ph
+#     SENTRY_LARAVEL_DSN (optional; empty → no-op)
+#     FAL_API_KEY (server-side only)
+#     GITHUB_TOKEN (for repo-aquarium fetches)
+#   Frontend service:
+#     APP_ENV=production
+#     NEXT_PUBLIC_APP_URL=https://fishbook.neri.ph
+#     NEXT_PUBLIC_API_BASE_URL=https://api.fishbook.neri.ph/api/v1
+#     BACKEND_INTERNAL_URL=https://api.fishbook.neri.ph/api/v1
+#     SESSION_COOKIE_NAME=fishbook_session
+#     SESSION_COOKIE_SECRET (32+ bytes; rotate carefully)
+#     NEXT_PUBLIC_SENTRY_DSN (optional)
+#     NEXT_PUBLIC_GOOGLE_OAUTH_ENABLED=true|false
+#
+# Failure mode: workflow exits non-zero → operator rolls back via Railway UI
+# ("Restore" button per deployment). No automated rollback in v1.
+
+name: deploy
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli@latest
+
+      - name: Deploy backend service
+        run: railway up --service backend --detach
+
+      - name: Wait for backend health
+        run: |
+          set -e
+          for i in $(seq 1 30); do
+            if curl -fsS https://api.fishbook.neri.ph/api/v1/health > /dev/null; then
+              echo "Backend healthy after ${i} attempts"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Backend healthcheck failed after 60s"
+          exit 1
+
+      - name: Run database migrations
+        run: railway run --service backend php artisan migrate --force
+
+      - name: Deploy frontend service
+        run: railway up --service frontend --detach
+
+      - name: Wait for frontend health
+        run: |
+          set -e
+          for i in $(seq 1 30); do
+            if curl -fsS https://fishbook.neri.ph/api/health > /dev/null; then
+              echo "Frontend healthy after ${i} attempts"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Frontend healthcheck failed after 60s"
+          exit 1
