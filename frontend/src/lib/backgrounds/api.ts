@@ -5,31 +5,8 @@ import {
   type BackgroundResourceEnvelope,
 } from '@/lib/api-client';
 
-// Reuse the slice 3 proxy-rewrite pattern so the generated client targets /api/proxy/*.
-// The generated client concatenates BASE_PATH + path producing a double /api/v1/api/v1
-// prefix. Collapse both to a single /api/proxy so the upstream proxy lands at /api/v1/*.
-const rewritePath = (p: string): string => {
-  let out = p;
-  while (out.startsWith('/api/v1/')) out = '/' + out.slice('/api/v1/'.length);
-  return '/api/proxy' + out;
-};
-
-const proxiedFetch: typeof fetch = (input, init) => {
-  if (typeof input === 'string' && input.startsWith('/api/v1/')) {
-    input = rewritePath(input);
-  } else if (input instanceof URL && input.pathname.startsWith('/api/v1/')) {
-    const u = new URL(input.toString());
-    u.pathname = rewritePath(u.pathname);
-    input = u;
-  } else if (input instanceof Request && input.url.includes('/api/v1/')) {
-    const u = new URL(input.url);
-    u.pathname = rewritePath(u.pathname);
-    input = new Request(u.toString(), input);
-  }
-  return fetch(input, init);
-};
-
-const config = new Configuration({ fetchApi: proxiedFetch });
+// Generated client targets the Next.js iron-session proxy at /api/proxy/*.
+const config = new Configuration({ basePath: '/api/proxy' });
 export const backgroundsApi = new BackgroundsApi(config);
 
 // The generated multipart upload through typescript-fetch is awkward; bypass it
