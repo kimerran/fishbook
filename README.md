@@ -6,14 +6,6 @@
 
 A virtual aquarium web app. Curate a school of pet fishes that swim across a full-viewport canvas, customize the background, and even turn any GitHub repository into a living aquarium.
 
-## Documents
-
-- [SPEC.md](./SPEC.md) — what the product does
-- [BRAND.md](./BRAND.md) — how it looks
-- [AGENT.md](./AGENT.md) — how to build it
-- [docs/superpowers/specs/](./docs/superpowers/specs/) — slice-by-slice designs
-- [docs/superpowers/plans/](./docs/superpowers/plans/) — implementation plans
-
 ## Quickstart
 
 ```bash
