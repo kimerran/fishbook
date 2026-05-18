@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { RepoAquariumPage } from '@/components/repo-aquarium/RepoAquariumPage';
 
 const stats = {
@@ -33,6 +33,24 @@ function wrap(ui: ReactNode) {
 }
 
 describe('RepoAquariumPage', () => {
+  // BackgroundLayer mounts when isAuthed and fires a real fetch on render. In CI
+  // there's no server at localhost:3000, so the unhandled rejection bubbles up and
+  // fails the suite even when assertions pass. Stub fetch globally; the fork test
+  // overrides per-call via spyOn.
+  beforeEach(() => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() =>
+        Promise.resolve(
+          new Response(JSON.stringify({ data: [] }), { status: 200 }),
+        ),
+      ),
+    );
+  });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it('renders stats panel + Fork button when authed', () => {
     render(
       wrap(
