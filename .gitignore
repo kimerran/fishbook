@@ -50,3 +50,9 @@ docker-compose.override.yml
 
 # Demo scripts
 DEMO_SCRIPT*.md
+
+# Internal-only docs (not for public repo)
+AGENT.md
+SPEC.md
+BRAND.md
+docs/superpowers/
