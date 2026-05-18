@@ -2,7 +2,7 @@
 # Dev: docker compose mounts the source and runs `npm run dev`.
 # Prod: future slice 1.5 uses the `runner` stage.
 
-FROM node:20-alpine AS base
+FROM node:26-alpine AS base
 WORKDIR /app
 
 # --- Dependencies stage ---
