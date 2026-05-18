@@ -45,6 +45,11 @@ Route::get('/fishes/breeds', [FishController::class, 'breeds'])
     ->middleware('throttle:api')
     ->name('fishes.breeds');
 
+// Signed HMAC URL (parity with S3 presign trust model) — emitted by BackgroundResource.signed_url.
+Route::get('/backgrounds/{background}/image', [BackgroundController::class, 'image'])
+    ->middleware(['signed', 'throttle:api'])
+    ->name('backgrounds.image');
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('fishes', FishController::class);
 

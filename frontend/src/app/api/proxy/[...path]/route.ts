@@ -23,6 +23,12 @@ async function handle(req: Request, ctx: RouteContext): Promise<Response> {
   }
   if (session.token) headers.Authorization = `Bearer ${session.token}`;
 
+  // Force Accept: application/json. Browser fetch sends `*/*` by default, which causes
+  // Laravel to render ValidationException (and other framework exceptions) as a 302
+  // redirect (form-validation default) instead of a JSON error response. This proxy is
+  // exclusively for /api/v1 JSON traffic, so it's safe to set unconditionally.
+  headers["accept"] = "application/json";
+
   const init: RequestInit = {
     method: req.method,
     headers,

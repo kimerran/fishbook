@@ -42,9 +42,9 @@ export function BackgroundLayer() {
 
   return (
     <>
-      {/* Background images are R2/S3-issued signed URLs with known dimensions stored on
-          the backgrounds row. next/image gives us AVIF/WebP conversion + priority
-          loading. Hostname allowlist lives in next.config.ts -> images.remotePatterns. */}
+      {/* signedUrl points at the backend image proxy (HMAC-signed). unoptimized: the asset
+          is already pre-resized + webp-compressed server-side, and SSR optimization would
+          require the Next server to follow the signed URL with side-channel auth. */}
       <Image
         src={active.signedUrl}
         alt=""

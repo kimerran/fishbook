@@ -63,13 +63,16 @@ export function AddFishDialog({
                         type="button"
                         onClick={() => field.onChange(b.id)}
                         className={clsx(
-                          'p-2 rounded-lg border',
+                          'p-2 rounded-lg border flex flex-col items-center gap-1',
                           field.value === b.id
                             ? 'ring-2 ring-primary border-transparent'
                             : 'border-outline-variant',
                         )}
                       >
                         <img src={`/sprites/fish/${b.id}.svg`} alt={b.label} className="w-12 h-6" />
+                        <span className="text-[10px] leading-tight text-center text-on-surface-variant">
+                          {b.label}
+                        </span>
                       </button>
                     )}
                   />

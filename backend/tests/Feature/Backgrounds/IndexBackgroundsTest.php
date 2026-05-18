@@ -8,9 +8,6 @@ use Laravel\Sanctum\Sanctum;
 
 beforeEach(function () {
     Storage::fake('s3');
-    Storage::disk('s3')->buildTemporaryUrlsUsing(function (string $path, $expiration) {
-        return 'https://fake-s3.test/'.$path.'?X-Amz-Signature=stub&X-Amz-Expires=3600';
-    });
     $this->user = User::factory()->create();
     Sanctum::actingAs($this->user);
 });
@@ -29,10 +26,13 @@ it('lists only own rows ordered by active+created', function () {
     expect($r->json('data.0.is_active'))->toBeTrue();
 });
 
-it('includes a signed URL with X-Amz-Signature', function () {
-    Background::factory()->for($this->user)->create();
+it('includes a signed proxy URL pointing at the image route', function () {
+    $bg = Background::factory()->for($this->user)->create();
     $r = $this->getJson('/api/v1/backgrounds')->assertOk();
-    expect($r->json('data.0.signed_url'))->toContain('X-Amz-Signature');
+    $url = $r->json('data.0.signed_url');
+    expect($url)->toContain("/api/v1/backgrounds/{$bg->ulid}/image");
+    expect($url)->toContain('signature=');
+    expect($url)->toContain('expires=');
 });
 
 it('runs under the query budget', function () {

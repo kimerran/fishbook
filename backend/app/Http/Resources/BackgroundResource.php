@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use App\Models\Background;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
@@ -36,7 +36,11 @@ class BackgroundResource extends JsonResource
             'id' => $bg->ulid,
             'kind' => $bg->kind,
             'storage_key' => $bg->storage_key,
-            'signed_url' => Storage::disk('s3')->temporaryUrl($bg->storage_key, now()->addHour()),
+            'signed_url' => URL::temporarySignedRoute(
+                'backgrounds.image',
+                now()->addHour(),
+                ['background' => $bg->ulid],
+            ),
             'width' => (int) $bg->width,
             'height' => (int) $bg->height,
             'prompt' => $bg->prompt,

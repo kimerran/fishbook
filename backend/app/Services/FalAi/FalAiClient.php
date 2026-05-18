@@ -86,12 +86,20 @@ class FalAiClient
         return $this->processor->process($upload, $userId);
     }
 
-    private function imageSizeFor(string $aspect): string
+    /**
+     * Explicit dimensions (not Fal's named presets): the `landscape_16_9` preset returns
+     * 1024×576, which is below BackgroundImageProcessor's 1280×720 floor and trips
+     * DimensionsTooSmallException post-generate. All values are multiples of 16 for FLUX
+     * compatibility.
+     *
+     * @return array{width:int,height:int}
+     */
+    private function imageSizeFor(string $aspect): array
     {
         return match ($aspect) {
-            '3:2' => 'landscape_3_2',
-            '1:1' => 'square_hd',
-            default => 'landscape_16_9',
+            '3:2' => ['width' => 1280, 'height' => 848],
+            '1:1' => ['width' => 1280, 'height' => 1280],
+            default => ['width' => 1280, 'height' => 720],
         };
     }
 }

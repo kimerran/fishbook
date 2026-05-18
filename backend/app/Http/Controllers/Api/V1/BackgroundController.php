@@ -12,7 +12,9 @@ use App\Services\Backgrounds\BackgroundService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Storage;
 use OpenApi\Attributes as OA;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class BackgroundController extends Controller
 {
@@ -140,5 +142,16 @@ class BackgroundController extends Controller
         $this->service->delete($request->user(), $background);
 
         return response()->json(null, 204);
+    }
+
+    public function image(Background $background): StreamedResponse
+    {
+        $disk = Storage::disk('s3');
+        abort_unless($disk->exists($background->storage_key), 404);
+
+        return $disk->response($background->storage_key, headers: [
+            'Content-Type' => 'image/webp',
+            'Cache-Control' => 'private, max-age=3600',
+        ]);
     }
 }

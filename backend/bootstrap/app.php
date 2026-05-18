@@ -8,6 +8,7 @@ use App\Exceptions\FalAi\FalAiFailedException;
 use App\Exceptions\FalAi\FalAiQuotaException;
 use App\Exceptions\FalAi\FalAiTimeoutException;
 use App\Http\Middleware\SecurityHeaders;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -25,6 +26,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append(SecurityHeaders::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        // API-only app: no `login` named route exists. Without this, an unauthenticated
+        // request to a guarded route triggers Authenticate::redirectTo() → route('login')
+        // → RouteNotFoundException → 500. Returning 401 here is the correct contract.
+        $exceptions->render(function (AuthenticationException $e) {
+            return response()->json(['message' => 'Unauthenticated.'], 401);
+        });
         $exceptions->render(function (DimensionsTooSmallException $e) {
             return response()->json(['message' => $e->getMessage(), 'errors' => ['image' => [$e->getMessage()]]], 422);
         });

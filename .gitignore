@@ -47,3 +47,6 @@ backend/public/storage
 
 # Docker
 docker-compose.override.yml
+
+# Demo scripts
+DEMO_SCRIPT*.md

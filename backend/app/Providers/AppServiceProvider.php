@@ -32,6 +32,17 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
+        // Force generated URLs (including temporarySignedRoute) to use APP_URL instead of
+        // the inbound request's Host. Behind the frontend proxy the request arrives with
+        // host=backend:8000 (docker-internal); we want signed image URLs that the browser
+        // can actually reach. Signature parity holds because verification uses the same host
+        // when the browser hits backend directly on the published port.
+        if (! $this->app->environment('testing')) {
+            if ($appUrl = config('app.url')) {
+                URL::forceRootUrl($appUrl);
+            }
+        }
+
         RateLimiter::for('auth', function (Request $request) {
             $username = (string) $request->input('username', 'anon');
 

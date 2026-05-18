@@ -3,6 +3,10 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { AquariumCanvas } from '@/components/aquarium/AquariumCanvas';
+import { BackgroundLayer } from '@/components/aquarium/BackgroundLayer';
+import { AddFishDialog } from '@/components/manage/AddFishDialog';
+import { BackgroundPanel } from '@/components/manage/BackgroundPanel';
+import { FishManagerModal } from '@/components/manage/FishManagerModal';
 import { useBreedsQuery } from '@/hooks/use-fish-queries';
 import { useForkRepoMutation } from '@/hooks/use-fork-repo-mutation';
 
@@ -41,6 +45,9 @@ export function RepoAquariumPage(props: {
   }));
   const fork = useForkRepoMutation(owner, repo);
   const [toast, setToast] = useState<string | null>(null);
+  const [manageOpen, setManageOpen] = useState(false);
+  const [addOpen, setAddOpen] = useState(false);
+  const [backgroundOpen, setBackgroundOpen] = useState(false);
 
   const onFork = async () => {
     try {
@@ -53,6 +60,7 @@ export function RepoAquariumPage(props: {
 
   return (
     <div className="relative w-screen h-screen">
+      {isAuthed && <BackgroundLayer />}
       <AquariumCanvas fishes={fish_set} breeds={breeds} readOnly />
 
       <aside className="fixed top-4 right-4 z-30 glass-md rounded-xl px-4 py-3 text-sm">
@@ -67,18 +75,53 @@ export function RepoAquariumPage(props: {
           <span>👥 {stats.contributors}</span>
           <span>💬 {stats.language ?? '—'}</span>
         </div>
+        <div className="mt-3 pt-3 border-t border-white/20 text-xs leading-relaxed">
+          <div className="font-medium mb-1">How your aquarium is built</div>
+          <ul className="space-y-0.5">
+            <li>⭐ → guppies, neons, mollies</li>
+            <li>🍴 → zebra danios</li>
+            <li>🐛 → otocinclus</li>
+            <li>👀 → platy</li>
+            <li>👥 → endlers (1 each)</li>
+            <li>age → cory catfish</li>
+            <li>💬 language tints colors</li>
+          </ul>
+        </div>
       </aside>
 
-      <div className="fixed bottom-4 right-4 z-30">
+      <div className="fixed bottom-4 right-4 z-30 flex flex-wrap gap-2 justify-end">
         {isAuthed ? (
-          <button
-            type="button"
-            onClick={onFork}
-            disabled={fork.isPending}
-            className="glass-md rounded-xl px-4 py-3 hover:bg-white/60 transition-colors"
-          >
-            {fork.isPending ? 'Forking…' : 'Fork to My Aquarium'}
-          </button>
+          <>
+            <button
+              type="button"
+              onClick={() => setAddOpen(true)}
+              className="px-6 py-3 rounded-full bg-white/20 border border-white/20 font-label-caps text-[12px] tracking-[0.1em] uppercase"
+            >
+              Add fish
+            </button>
+            <button
+              type="button"
+              onClick={() => setManageOpen(true)}
+              className="px-6 py-3 rounded-full bg-white/20 border border-white/20 font-label-caps text-[12px] tracking-[0.1em] uppercase"
+            >
+              Manage
+            </button>
+            <button
+              type="button"
+              onClick={() => setBackgroundOpen(true)}
+              className="px-6 py-3 rounded-full bg-primary/30 border border-white/40 text-on-primary-container font-label-caps text-[12px] tracking-[0.1em] uppercase"
+            >
+              Background
+            </button>
+            <button
+              type="button"
+              onClick={onFork}
+              disabled={fork.isPending}
+              className="glass-md rounded-xl px-4 py-3 hover:bg-white/60 transition-colors"
+            >
+              {fork.isPending ? 'Forking…' : 'Fork to My Aquarium'}
+            </button>
+          </>
         ) : (
           <Link
             href={`/login?redirect=/${owner}/${repo}`}
@@ -96,6 +139,14 @@ export function RepoAquariumPage(props: {
         >
           {toast}
         </div>
+      )}
+
+      {isAuthed && (
+        <>
+          <FishManagerModal open={manageOpen} onOpenChange={setManageOpen} />
+          <AddFishDialog open={addOpen} onOpenChange={setAddOpen} />
+          <BackgroundPanel open={backgroundOpen} onOpenChange={setBackgroundOpen} />
+        </>
       )}
     </div>
   );

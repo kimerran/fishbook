@@ -47,6 +47,8 @@ describe('RepoAquariumPage', () => {
     );
     expect(screen.getByText(/o\/r/)).toBeInTheDocument();
     expect(screen.getByText(/100/)).toBeInTheDocument();
+    expect(screen.getByText(/how your aquarium is built/i)).toBeInTheDocument();
+    expect(screen.getByText(/zebra danios/i)).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: /fork to my aquarium/i }),
     ).toBeInTheDocument();
