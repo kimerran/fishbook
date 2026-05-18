@@ -72,11 +72,22 @@ describe('RepoAquariumPage', () => {
   });
 
   it('calls the fork mutation on click', async () => {
+    // Mint a fresh Response per call: BackgroundLayer (rendered when isAuthed) also
+    // fetches /api/proxy/backgrounds on mount, and Response bodies are single-shot
+    // streams — sharing one would have its body already consumed before the fork POST.
     const fetchMock = vi
       .spyOn(globalThis, 'fetch')
-      .mockResolvedValue(
-        new Response(JSON.stringify({ added: 5 }), { status: 201 }),
-      );
+      .mockImplementation((input) => {
+        const url = typeof input === 'string' ? input : (input as Request).url;
+        if (url.includes('/fork-to-my-aquarium')) {
+          return Promise.resolve(
+            new Response(JSON.stringify({ added: 5 }), { status: 201 }),
+          );
+        }
+        return Promise.resolve(
+          new Response(JSON.stringify({ data: [] }), { status: 200 }),
+        );
+      });
     render(
       wrap(
         <RepoAquariumPage
