@@ -9,10 +9,14 @@ test("renders the brand tagline as the page H1", () => {
   ).toBeInTheDocument();
 });
 
-test("renders disabled sign-in and create-account affordances", () => {
+test("renders sign-in and create-account links", () => {
   render(<Landing />);
-  const signIn = screen.getByRole("button", { name: /sign in/i });
-  const create = screen.getByRole("button", { name: /create account/i });
-  expect(signIn).toBeDisabled();
-  expect(create).toBeDisabled();
+  expect(screen.getByRole("link", { name: /sign in/i })).toHaveAttribute(
+    "href",
+    "/login",
+  );
+  expect(screen.getByRole("link", { name: /create account/i })).toHaveAttribute(
+    "href",
+    "/register",
+  );
 });
