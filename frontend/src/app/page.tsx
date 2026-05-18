@@ -3,23 +3,13 @@ import Link from "next/link";
 export default function Landing() {
   return (
     <main
-      className="relative min-h-screen overflow-hidden"
-      style={{
-        background:
-          "radial-gradient(ellipse at top, #eef3f6 0%, #f8fafb 70%)",
-      }}
+      className="relative min-h-screen overflow-hidden bg-cover bg-center"
+      style={{ backgroundImage: "url('/landing-bg.webp')" }}
     >
+      {/* Soft frost overlay so headline + buttons stay legible over any background. */}
       <div
         aria-hidden
-        className="absolute -top-32 -right-24 w-96 h-96
-                   rounded-full blur-3xl mix-blend-multiply"
-        style={{ backgroundColor: "rgba(168, 187, 162, 0.2)" }}
-      />
-      <div
-        aria-hidden
-        className="absolute bottom-0 left-12 w-80 h-80
-                   rounded-full blur-2xl mix-blend-multiply"
-        style={{ backgroundColor: "rgba(211, 229, 240, 0.3)" }}
+        className="absolute inset-0 bg-white/30 backdrop-blur-[2px]"
       />
 
       <section
