@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Landing() {
   return (
     <main
@@ -41,26 +43,21 @@ export default function Landing() {
           atmosphere, and let your favorite repository become its own tide pool.
         </p>
         <div className="flex gap-4 mt-4">
-          <button
-            disabled
-            aria-disabled
+          <Link
+            href="/login"
             className="glass-md rounded-full px-6 py-3 label-caps
-                       text-on-surface opacity-50 cursor-not-allowed"
+                       text-on-surface hover:bg-white/40 transition-colors"
           >
             Sign in
-          </button>
-          <button
-            disabled
-            aria-disabled
+          </Link>
+          <Link
+            href="/register"
             className="glass-sm rounded-full px-6 py-3 label-caps
-                       text-on-surface-variant opacity-50 cursor-not-allowed"
+                       text-on-surface-variant hover:bg-white/30 transition-colors"
           >
             Create account
-          </button>
+          </Link>
         </div>
-        <p className="label-caps text-on-surface-variant/60 mt-8">
-          Coming soon
-        </p>
       </section>
     </main>
   );
