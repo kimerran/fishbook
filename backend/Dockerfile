@@ -2,7 +2,7 @@
 # Dev: docker compose mounts the source and runs `php artisan serve`.
 # Prod: future slice 1.5 uses the `app` stage.
 
-FROM php:8.3-cli-alpine AS base
+FROM php:8.5-cli-alpine AS base
 
 RUN apk add --no-cache \
       git \
