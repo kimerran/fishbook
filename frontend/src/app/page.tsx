@@ -26,8 +26,9 @@ export default function Landing() {
           Your Zen Sanctuary, Powered by Code.
         </h1>
         <p
-          className="font-light leading-[1.6] text-on-surface-variant
-                     max-w-[48ch] text-[16px]"
+          className="font-light leading-[1.6] text-on-surface
+                     max-w-[48ch] text-[16px]
+                     glass-sm rounded-2xl px-5 py-3"
         >
           A virtual aquarium for the curious. Curate a school of fish, shape the
           atmosphere, and let your favorite repository become its own tide pool.
