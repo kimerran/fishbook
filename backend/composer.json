@@ -9,7 +9,7 @@
         "php": "^8.3",
         "bjeavons/zxcvbn-php": "^1.4",
         "darkaonline/l5-swagger": "^11.0",
-        "intervention/image": "^3.7",
+        "intervention/image": "^4.1",
         "laravel/framework": "^13.8",
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.27",
